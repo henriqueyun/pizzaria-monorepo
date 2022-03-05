@@ -4,8 +4,7 @@
     <ul class="nav-menu">
       <router-link to="/cadastrar_endereco"><li class="nav-menu-item">Cadastrar endereço</li></router-link>
       <router-link to="/cardapio"><li class="nav-menu-item">Cardápio</li></router-link>
-      <router-link to="/realizar_pedido"><li class="nav-menu-item">Realizar pedido <cart-icon/></li></router-link>
-      <router-link to="/carrinho"><li class="nav-menu-item"></li></router-link>
+      <router-link to="/carrinho"><li class="nav-menu-item">Carrinho <cart-icon/></li></router-link>
     </ul>
   </nav>
 </template>

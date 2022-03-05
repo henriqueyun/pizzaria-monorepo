@@ -5,6 +5,7 @@ import WelcomeView from '../views/WelcomeView.vue'
 import CardapioView from '../views/CardapioView.vue'
 import CadastrarEnderecoView from '../views/CadastrarEnderecoView.vue'
 import AdicionarPizzaView from '../views/AdicionarPizzaView.vue'
+import CarrinhoView from '../views/CarrinhoView.vue'
 
 Vue.use(VueRouter)
 
@@ -25,6 +26,10 @@ const routes = [
     path: '/adicionar_pizza/:id',
     component: AdicionarPizzaView
   },
+  {
+    path: '/carrinho',
+    component: CarrinhoView
+  },  
   {
     // will match everything
     path: '*',
