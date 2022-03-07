@@ -12,7 +12,7 @@
       <hr/><br/>
       <h2>Valor total: R$ {{itemsPedido.reduce((acc, item) => { return item.preco * item.qtd })}}.00</h2>
       <span>
-        <span class="btn-realizar-pedido" @click="cadastrarDadosCliente">Realizar pedido</span>
+        <span class="btn-realizar-pedido" @click="realizarPedido()">Realizar pedido</span>
       </span>
     </main>
   </section>
@@ -24,8 +24,13 @@ export default {
     return {
       itemsPedido: [  
         { id: 1, qtd: 2, sabor: 'Muçarela', ingredientes: ['Queijo muçarela', 'molho de tomates', 'tomates', 'azeitonas'], preco: '42.00', imgURL: '/pizza1.png'},
-        { id: 1, qtd: 2, sabor: 'Muçarela', ingredientes: ['Queijo muçarela', 'molho de tomates', 'tomates', 'azeitonas'], preco: '42.00', imgURL: '/pizza1.png'}
+        { id: 2, qtd: 1, sabor: 'Calabresa', ingredientes: ['Calabresa fatiada', 'cebola', 'molho de tomates', 'tomates', 'azeitonas'], preco: '42.00', imgURL: '/pizza1.png'}
       ]
+    }
+  },
+  methods: {
+    realizarPedido () {
+      alert('Ainda não tá pronto')
     }
   }
 }
@@ -38,8 +43,6 @@ export default {
   
   .btn-realizar-pedido {
     padding: 5px;
-    margin-top: 10px;
-    display: inline-block;
     font-size: x-large;
     color: white;
     text-decoration: none;

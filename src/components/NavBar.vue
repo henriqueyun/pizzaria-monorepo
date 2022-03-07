@@ -1,10 +1,11 @@
 <template>
     <nav class="nav-bar">
-    <router-link to="/"><h1 class="nav-logotype">Projeto Pizzaria 🍕</h1></router-link>
+    <router-link to="/"><h1 class="nav-logotype">Projeto Pizzaria</h1></router-link>
     <ul class="nav-menu">
       <router-link to="/cadastrar_endereco"><li class="nav-menu-item">Cadastrar endereço</li></router-link>
       <router-link to="/cardapio"><li class="nav-menu-item">Cardápio</li></router-link>
       <router-link to="/carrinho"><li class="nav-menu-item">Carrinho <cart-icon/></li></router-link>
+      <router-link to="/rastrear"><li class="nav-menu-item">Meu pedido</li></router-link>
     </ul>
   </nav>
 </template>

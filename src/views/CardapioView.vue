@@ -69,7 +69,7 @@
         </span>
         <span class="card-pizza-action">
           <h2>R$ {{ pizza.preco }}</h2>
-          <router-link :to="`/adicionar_pizza/${pizza.id}`"><span>Pedir agora!</span></router-link>
+          <router-link :to="`/produto/${pizza.id}/adicionar`"><span>Pedir agora!</span></router-link>
         </span>
       </div> 
     </main>

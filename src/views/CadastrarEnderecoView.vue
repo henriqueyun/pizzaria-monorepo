@@ -66,7 +66,6 @@ export default {
     padding: 5px;
     font-size: x-large;
     color: white;
-    text-decoration: none;
     background-color: black;
     cursor: pointer;
   }
