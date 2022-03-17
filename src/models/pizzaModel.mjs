@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize'
 import sequelize from '../sequelize.mjs'
 
-const PizzaModel = sequelize.define('pizz', {
+const PizzaModel = sequelize.define('pizza', {
   nome: {
     type: DataTypes.STRING,
     allowNull: false
