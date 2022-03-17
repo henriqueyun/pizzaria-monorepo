@@ -1,5 +1,5 @@
-import app from '../index.mjs'
-import Pizza from '../classes/Pizza.mjs'
+import app from '../src/index.mjs'
+import Pizza from '../src/classes/Pizza.mjs'
 
 import chai from 'chai'
 import chai_http from 'chai-http'
