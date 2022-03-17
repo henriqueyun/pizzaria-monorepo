@@ -4,6 +4,7 @@ const config = {
   databasePassword: process.env.DB_PASSWORD || 'root',
   databaseHost: process.env.DB_HOST || 'localhost',
   databasePort: process.env.DB_PORT || 3306,
+  logLevel: process.env.LOG_LEVEL || 'debug',
   port: process.env.PORT || 8080
 }
 
