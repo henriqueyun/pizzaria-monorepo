@@ -1,11 +1,11 @@
-import ProdutoModel from '../models/produtoModel.mjs'
+import PizzaModel from '../models/pizzaModel.mjs'
 import Pizza from '../classes/Pizza.mjs'
 
 export async function cadastrar(req, res) {
   const { nome, preco, imgURL, ingredientes, saborAdicional } = req.body
 
   const pizza = new Pizza(nome, preco, imgURL, ingredientes, saborAdicional)
-  const novaPizza = ProdutoModel.build(pizza)
+  const novaPizza = PizzaModel.build(pizza)
   
   await novaPizza.save()
     .catch(error => {
@@ -16,7 +16,7 @@ export async function cadastrar(req, res) {
 }
 
 export async function editar(req, res) {
-  const pizza = await ProdutoModel.findOne({ where: { id: req.params.id } })
+  const pizza = await PizzaModel.findOne({ where: { id: req.params.id } })
     .catch(error => {
         console.log('Erro buscar pizza!', error)
         return res.sendStatus(500)
@@ -41,7 +41,7 @@ export async function editar(req, res) {
 
 export async function excluir(req, res) {
   const idPizza = req.params.id
-  await ProdutoModel.destroy({ where: { id: idPizza } })
+  await PizzaModel.destroy({ where: { id: idPizza } })
       .catch(error => {
         console.log('Erro na função excluir pizza!', error)
         return res.sendStatus(500)

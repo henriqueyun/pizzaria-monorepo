@@ -1,7 +1,7 @@
-const { DataTypes } = require('sequelize')
-const sequelize = require('./sequelize')
+import { DataTypes } from 'sequelize'
+import sequelize from '../sequelize.mjs'
 
-const produto = sequelize.define('produto', {
+const PizzaModel = sequelize.define('pizz', {
   nome: {
     type: DataTypes.STRING,
     allowNull: false
@@ -22,14 +22,15 @@ const produto = sequelize.define('produto', {
     type: DataTypes.STRING,
     allowNull: true
   },
-  volume: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
-  },
-  alcoolica: {
-    type: DataTypes.BOOLEAN,
-    allowNull: true
+  tipo: {
+    type: DataTypes.STRING,
+    allowNull: false
   }
 })
 
-module.exports = produto
+PizzaModel.sync()
+  .then(() => {
+    console.log('Pizza sincronizada')
+  })
+
+export default PizzaModel
