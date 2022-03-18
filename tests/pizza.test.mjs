@@ -1,17 +1,7 @@
-import app from '../src/index.mjs'
 import Pizza from '../src/classes/Pizza.mjs'
+import { expect, request } from './setup.mjs'
 
-import chai from 'chai'
-import chai_http from 'chai-http'
-
-const expect = chai.expect
-chai.use(chai_http)
-
-const request = () => {
-    return chai.request(app)
-}
-
-let pizzaId;
+let pizzaId
 
 describe('/api/v1/pizza endpoint tests', function () {
   it('should save a new pizza', done => {
