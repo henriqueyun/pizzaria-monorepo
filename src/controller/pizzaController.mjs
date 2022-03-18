@@ -59,4 +59,5 @@ export async function buscar(req, res) {
 }
 
 const pizzaController = { cadastrar, editar, excluir, buscar }
+
 export default pizzaController
