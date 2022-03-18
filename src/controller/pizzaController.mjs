@@ -1,5 +1,6 @@
-import PizzaModel from '../models/pizzaModel.mjs'
 import Pizza from '../classes/Pizza.mjs'
+import PizzaModel from '../models/pizzaModel.mjs'
+import logger from '../logger.mjs'
 
 export async function cadastrar(req, res) {
   const { nome, preco, imgURL, ingredientes, saborAdicional } = req.body
@@ -9,8 +10,8 @@ export async function cadastrar(req, res) {
   
   await novaPizza.save()
     .catch(error => {
-        console.log('Erro na função cadastrar pizza!', error)
-        return res.sendStatus(500)
+      logger.error('Erro na função cadastrar pizza!', error)
+      return res.sendStatus(500)
     })
   return res.status(201).json({ id: novaPizza.id })
 }
@@ -18,8 +19,8 @@ export async function cadastrar(req, res) {
 export async function editar(req, res) {
   const pizza = await PizzaModel.findOne({ where: { id: req.params.id } })
     .catch(error => {
-        console.log('Erro buscar pizza!', error)
-        return res.sendStatus(500)
+      logger.error('Erro buscar pizza!', error)
+      return res.sendStatus(500)
     })
   if (!pizza) {
     return res.sendStatus(404)
@@ -29,12 +30,12 @@ export async function editar(req, res) {
     await pizza.update(pizzaNovosDados)
     await pizza.save()
       .catch(error => {
-        console.log('Erro na função editar pizza!', error)
+        logger.error('Erro na função editar pizza!', error)
         return res.sendStatus(500)
       })
     return res.sendStatus(200)
   } catch (error) {
-    console.error(error)
+    logger.error(error)
     return res.sendStatus(500)
   }
 }
@@ -42,18 +43,18 @@ export async function editar(req, res) {
 export async function excluir(req, res) {
   const idPizza = req.params.id
   await PizzaModel.destroy({ where: { id: idPizza } })
-      .catch(error => {
-        console.log('Erro na função excluir pizza!', error)
-        return res.sendStatus(500)
-      })
+    .catch(error => {
+      logger.error('Erro na função excluir pizza!', error)
+      return res.sendStatus(500)
+    })
   res.sendStatus(200)
 }
 
 export async function buscar(req, res) {
   const pizza = await PizzaModel.findOne({ where: { id: req.params.id } })
     .catch(error => {
-        console.log('Erro buscar pizza!', error)
-        return res.sendStatus(500)
+      logger.error('Erro buscar pizza!', error)
+      return res.sendStatus(500)
     })
   return res.status(200).json(pizza)
 }

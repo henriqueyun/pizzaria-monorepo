@@ -24,7 +24,7 @@ describe('/api/v1/pizza endpoint tests', function () {
       .send(new Pizza('Aipim sem abacate', 4.50, null, 'Queijo, aipim, molhote de tomate e azeitonas', null))
       .end((err, res) => {
         if (err) {
-            done()
+          done()
         }
         expect(res).to.have.status(200)
         done()
@@ -37,7 +37,7 @@ describe('/api/v1/pizza endpoint tests', function () {
     .send()
     .end((err, res) => {
       if (err) {
-          done()
+        done()
       }
       expect(res).to.have.status(200)
       done()
@@ -50,7 +50,7 @@ describe('/api/v1/pizza endpoint tests', function () {
       .send()
       .end((err, res) => {
         if (err) {
-            done()
+          done()
         }
         expect(res).to.have.status(200)
         done()
