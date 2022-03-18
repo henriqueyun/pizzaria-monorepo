@@ -1,3 +1,5 @@
 import pizzaController from './pizzaController.mjs'
-const controller = { pizzaController }
+import bebidaController from './bebidaController.mjs'
+
+const controller = { pizzaController, bebidaController }
 export default controller
