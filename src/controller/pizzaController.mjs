@@ -56,6 +56,9 @@ export async function buscar(req, res) {
       logger.error('Erro buscar pizza!', error)
       return res.sendStatus(500)
     })
+  if (!pizza) {
+    return res.status(404).send('Pizza not found')
+  }
   return res.status(200).json(pizza)
 }
 

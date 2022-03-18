@@ -59,6 +59,9 @@ export async function buscar(req, res) {
       logger.error(`Erro buscar bebida!' ${error}`)
       return res.sendStatus(500)
     })
+  if (!bebida) {
+    return res.sendStatus(404)
+  }
   return res.status(200).json(bebida)
 }
 
