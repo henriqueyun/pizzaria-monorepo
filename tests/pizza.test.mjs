@@ -11,6 +11,8 @@ const request = () => {
     return chai.request(app)
 }
 
+let pizzaId;
+
 describe('/api/v1/pizza endpoint tests', function () {
   it('should save a new pizza', done => {
     request()
@@ -20,6 +22,7 @@ describe('/api/v1/pizza endpoint tests', function () {
         if (err) {
           done()
         }
+        pizzaId = res.body.id
         expect(res).to.have.status(201)
         done()
       })
@@ -27,7 +30,7 @@ describe('/api/v1/pizza endpoint tests', function () {
 
   it('should edit a existent pizza', done => {
     request()
-      .put('/api/v1/pizza/1')
+      .put(`/api/v1/pizza/${pizzaId}`)
       .send(new Pizza('Aipim sem abacate', 4.50, null, 'Queijo, aipim, molhote de tomate e azeitonas', null))
       .end((err, res) => {
         if (err) {
@@ -38,9 +41,22 @@ describe('/api/v1/pizza endpoint tests', function () {
       })
   }).timeout(10000)
 
+  it('should find a existent pizza', done => {
+  request()
+    .get(`/api/v1/pizza/${pizzaId}`)
+    .send()
+    .end((err, res) => {
+      if (err) {
+          done()
+      }
+      expect(res).to.have.status(200)
+      done()
+    })
+  }).timeout(10000)
+
   it('should delete a existent pizza', done => {
     request()
-      .delete('/api/v1/pizza/1')
+      .delete(`/api/v1/pizza/${pizzaId}`)
       .send()
       .end((err, res) => {
         if (err) {

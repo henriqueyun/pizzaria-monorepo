@@ -12,7 +12,7 @@ export async function cadastrar(req, res) {
         console.log('Erro na função cadastrar pizza!', error)
         return res.sendStatus(500)
     })
-  return res.sendStatus(201)
+  return res.status(201).json({ id: novaPizza.id })
 }
 
 export async function editar(req, res) {
@@ -49,8 +49,13 @@ export async function excluir(req, res) {
   res.sendStatus(200)
 }
 
-export function buscar(req, res) {
-  
+export async function buscar(req, res) {
+  const pizza = await PizzaModel.findOne({ where: { id: req.params.id } })
+    .catch(error => {
+        console.log('Erro buscar pizza!', error)
+        return res.sendStatus(500)
+    })
+  return res.status(200).json(pizza)
 }
 
 const pizzaController = { cadastrar, editar, excluir, buscar }
