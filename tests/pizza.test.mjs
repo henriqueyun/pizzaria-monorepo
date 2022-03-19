@@ -44,16 +44,16 @@ describe('/api/v1/pizza endpoint tests', function () {
     })
   }).timeout(10000)
 
-  it('should delete a existent pizza', done => {
-    request()
-      .delete(`/api/v1/pizza/${pizzaId}`)
-      .send()
-      .end((err, res) => {
-        if (err) {
-          done()
-        }
-        expect(res).to.have.status(200)
-        done()
-      })
-  }).timeout(10000)
+  // it('should delete a existent pizza', done => {
+  //   request()
+  //     .delete(`/api/v1/pizza/${pizzaId}`)
+  //     .send()
+  //     .end((err, res) => {
+  //       if (err) {
+  //         done()
+  //       }
+  //       expect(res).to.have.status(200)
+  //       done()
+  //     })
+  // }).timeout(10000)
 })
