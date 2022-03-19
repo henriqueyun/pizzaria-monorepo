@@ -4,12 +4,12 @@
       <h1>{{ obterPalavraComPrimeiraLetraMaiuscula(action)}} {{ obterPalavraComPrimeiraLetraMaiuscula(produto.tipo) }}</h1>
     </header>
     <main class="simple-container">
-      <label for="nomeProduto">{{ ['pizza', 'esfiha'].includes(produto.tipo.toLowerCase()) ? 'Sabor:' : 'Nome:' }}</label><br/>
-      <input type="text" name="nomeProduto" placeholder="Carregando informações..."/>
+      <label v-if="produto.tipo" for="nomeProduto">{{ ['pizza', 'esfiha'].includes(produto.tipo.toLowerCase()) ? 'Sabor:' : 'Nome:' }}</label><br/>
+      <input type="text" disabled name="nomeProduto" :value="produto.nome" placeholder="Carregando informações..."/>
       <label for="precoProduto">Preço:</label><br/>
-      <input type="text" name="precoProduto" placeholder="Carregando informações..."/>
+      <input type="text" disabled name="precoProduto" :value="produto.preco" placeholder="Carregando informações..."/>
       <label for="qtd">Quantidade:</label><br/>
-      <input type="number" name="qtd" min="0" max="99" value="1"/><br/>
+      <input v-model="qtd" type="number" name="qtd" min="0" max="99" value="1"/><br/>
       <span @click="adicionarItem()">Adicionar ao carrinho</span>
     </main>
   </section>
@@ -24,6 +24,7 @@ export default {
         nome: '',
         tipo: ''
       },
+      qtd: 1,
       itemPedido: {},
       action: this.$route.params.action,
       acaoEncontrada: true
@@ -32,6 +33,11 @@ export default {
 
   mounted() {
     this.carregarDados()
+    let itensPedido = localStorage.getItem('itensPedido')
+    if (!itensPedido) {
+      itensPedido = []
+      localStorage.setItem('itensPedido', JSON.stringify(itensPedido))
+    }
   },
 
   methods: {
@@ -42,9 +48,7 @@ export default {
           this.produto = await ProdutoService.get(this.$route.params.id)          
         },
         editar: () => {
-          let itensPedido = this.localStorage().getItem('itensPedido')
-          itensPedido = JSON.parse('itensPedido')
-          itensPedido[this.$route.params.id]
+          alert('Não implementado ainda')
         }
       }
       if (this.$route.params.action in metodosCarregamento) {
@@ -54,8 +58,21 @@ export default {
         window.location = '/'
       }
     },
+
     obterPalavraComPrimeiraLetraMaiuscula(palavra) {
+      if (!palavra) {
+        return ''
+      }
       return palavra.charAt(0).toUpperCase() + palavra.slice(1)
+    },
+
+    adicionarItem() {
+      let itensPedido = JSON.parse(localStorage.getItem('itensPedido'))
+      console.log(itensPedido)
+      const item = { produto: this.produto, qtd: this.qtd }
+      itensPedido.push(item)
+      localStorage.setItem('itensPedido', JSON.stringify(itensPedido))
+      alert('Produto adicionado ao carrinho!')
     }
   }
 }

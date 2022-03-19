@@ -4,7 +4,7 @@
       <h1>Cardárpio</h1>
     </header>
     <main class="container">
-        <div class="card-pizza">
+      <!-- <div class="card-pizza">
           <span>
             <img src="../assets/pizza1.png" alt="" srcset="../assets/pizza1.png">
           </span>
@@ -58,14 +58,15 @@
           <h2>R$ 31.00</h2>
           <router-link to="/adicionar_pizza/teste"><span>Pedir agora!</span></router-link>
         </span>
-      </div>
+      </div> -->
+
       <div v-for="pizza in pizzas" v-bind:key="pizza.id" class="card-pizza">
-        <span>
+        <span class="img-wrapper">
           <img :src="pizza.imgURL" alt="" :srcset="pizza.imgURL"  >
         </span>
         <span class="card-pizza-text">
           <h2>{{ pizza.sabor }}</h2>
-          <p>{{ pizza.ingredientes.join(', ') }}.</p>
+          <p>{{ pizza.ingredientes }}.</p>
         </span>
         <span class="card-pizza-action">
           <h2>R$ {{ pizza.preco }}</h2>
@@ -81,17 +82,20 @@ export default {
   data () {
     return {
       pizzas: [
-        { id: 1, sabor: 'Muçarela', ingredientes: ['Queijo muçarela', 'molho de tomates', 'tomates', 'azeitonas'], preco: '42.00', imgURL: '/pizza1.png'}
+        { id: 1, sabor: 'Muçarela', ingredientes: 'Queijo muçarela, molho de tomates, tomates, azeitonas', preco: '42.00', imgURL: '/pizza1.png'}
       ]
     }
   },
 
-  setup () {
-    this.pizzas.push()
+  mounted () {
+    this.buscarPizzas()
   },
 
   methods: {
-
+    async buscarPizzas() {
+      const pizzasResponse = await this.$axios.get(`${process.env.VUE_APP_MIDDLEWARE_API_URL}/api/v1/pizza/all`)
+      this.pizzas = pizzasResponse.data
+    }
   }
 }
 </script>
@@ -118,6 +122,12 @@ export default {
   display: flex; 
   flex-flow: column;
   justify-content: space-between;
+}
+
+.img-wrapper {
+  width: 128px;
+  background-color: gainsboro;
+  border-radius: 10px;
 }
 
 .card-pizza img {
