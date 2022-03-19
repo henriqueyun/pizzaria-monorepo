@@ -62,6 +62,18 @@ export async function buscar(req, res) {
   return res.status(200).json(pizza)
 }
 
-const pizzaController = { cadastrar, editar, excluir, buscar }
+export async function buscarTodas(req, res) {
+  const pizzas = await PizzaModel.findAll()
+    .catch(error => {
+      logger.error(`Erro ao buscar todas as pizzas ${error}`)
+      return res.sendStatus(500)
+    })
+  if (!pizzas.length) {
+    return res.sendStatus(404)
+  }
+  return res.status(200).json(pizzas)
+}
+
+const pizzaController = { cadastrar, editar, excluir, buscar, buscar, buscarTodas }
 
 export default pizzaController

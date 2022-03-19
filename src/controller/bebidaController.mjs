@@ -22,7 +22,7 @@ export async function cadastrar(req, res) {
 
 export async function editar(req, res) {
   const bebida = await BebidaModel.findOne({ where: { id: req.params.id } })
-    .catch(error => {
+  .catch(error => {
       logger.error('Erro buscar bebida!', error)
       return res.sendStatus(500)
     })
@@ -59,12 +59,25 @@ export async function buscar(req, res) {
       logger.error(`Erro buscar bebida!' ${error}`)
       return res.sendStatus(500)
     })
+  
   if (!bebida) {
     return res.sendStatus(404)
   }
   return res.status(200).json(bebida)
 }
 
-const bebidaController = { cadastrar, editar, excluir, buscar }
+export async function buscarTodas(req, res) {
+  const bebidas = await BebidaModel.findAll()
+    .catch(error => {
+      logger.error(`Erro ao buscar todas as bebidas ${error}`)
+      return res.sendStatus(500)
+    })
+  if (!bebidas.length) {
+    return res.sendStatus(404)
+  }
+  return res.status(200).json(bebidas)
+}
+
+const bebidaController = { cadastrar, editar, excluir, buscar, buscarTodas }
 
 export default bebidaController
