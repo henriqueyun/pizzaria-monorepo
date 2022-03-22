@@ -65,7 +65,7 @@
           <img :src="pizza.imgURL" alt="" :srcset="pizza.imgURL"  >
         </span>
         <span class="card-pizza-text">
-          <h2>{{ pizza.sabor }}</h2>
+          <h2>{{ pizza.nome }}</h2>
           <p>{{ pizza.ingredientes }}.</p>
         </span>
         <span class="card-pizza-action">
