@@ -3,24 +3,22 @@
     <header>
       <h1>Carrinho</h1>
     </header>
-    <main class="container">
-      <div
-        v-for="itemPedido in itemsPedido"
-        v-bind:key="itemPedido.id"
-        class="item-pedido"
-      >
-        <h2>{{ itemPedido.qtd }}× {{ itemPedido.sabor }}</h2>
-        <p>{{ itemPedido.ingredientes.join(", ") }}</p>
-        <p>Valor: R$ {{ itemPedido.qtd * itemPedido.preco }}.00</p>
+    <main class="container" >
+      <div v-if="itensPedido.length">  
+        <div
+          v-for="itemPedido in itensPedido"
+          v-bind:key="itemPedido.id"
+          class="item-pedido"
+        >
+          <h2>{{ itemPedido.qtd }}× {{ itemPedido.produto.nome }}</h2>
+          <p>{{ itemPedido.produto.ingredientes }}
+          <p>Valor: R$ {{ itemPedido.qtd * itemPedido.produto.preco}}</p>
+        </div>
       </div>
       <hr />
       <h2>
         Valor total: R$
-        {{
-          itemsPedido.reduce((acc, item) => {
-            return item.preco * item.qtd;
-          })
-        }}.00
+        {{ calcularValorTotalPedido() }}
       </h2>
       <label for="formaPagamento">Selecione a forma de pagamento:</label>
       <select>
@@ -29,9 +27,7 @@
         <option value="">Cartão de crédito</option>
       </select><br/>
       <span>
-        <span class="btn-realizar-pedido" @click="realizarPedido()"
-          >Realizar pedido</span
-        >
+        <span class="btn-realizar-pedido" @click="realizarPedido()">Realizar pedido</span>
       </span>
     </main>
   </section>
@@ -41,42 +37,34 @@
 export default {
   data() {
     return {
-      itemsPedido: [
-        {
-          id: 1,
-          qtd: 2,
-          sabor: "Muçarela",
-          ingredientes: [
-            "Queijo muçarela",
-            "molho de tomates",
-            "tomates",
-            "azeitonas",
-          ],
-          preco: "42.00",
-          imgURL: "/pizza1.png",
-        },
-        {
-          id: 2,
-          qtd: 1,
-          sabor: "Calabresa",
-          ingredientes: [
-            "Calabresa fatiada",
-            "cebola",
-            "molho de tomates",
-            "tomates",
-            "azeitonas",
-          ],
-          preco: "42.00",
-          imgURL: "/pizza1.png",
-        },
-      ],
+      itensPedido: [],
     };
   },
+
+  mounted () {
+    this.buscarItensPedido()
+  },
+
   methods: {
     realizarPedido() {
       alert("Ainda não tá pronto");
+    },
+    
+    buscarItensPedido() {
+      this.itensPedido = JSON.parse(localStorage.getItem('itensPedido'))
+      this.calcularValorTotalPedido()
+    },
+
+    calcularValorTotalPedido() {
+      if (this.itensPedido.length) {
+        return this.itensPedido.reduce((acc, item) => {
+          return { produto: { preco: acc.produto.preco + item.produto.preco }}
+        }).produto.preco
+      } else {
+        return 0
+      }
     }
-  },
+  }
 };
 </script>
 
