@@ -33,11 +33,7 @@ export default {
 
   mounted() {
     this.carregarDados()
-    let itensPedido = localStorage.getItem('itensPedido')
-    if (!itensPedido) {
-      itensPedido = []
-      localStorage.setItem('itensPedido', JSON.stringify(itensPedido))
-    }
+    this.validarItensPedido()
   },
 
   methods: {
@@ -67,12 +63,24 @@ export default {
     },
 
     adicionarItem() {
-      let itensPedido = JSON.parse(localStorage.getItem('itensPedido'))
+      this.validarItensPedido()
+      let itensPedido = localStorage.getItem('itensPedido')
+      itensPedido = JSON.parse(itensPedido)
+      const item = { pizzaId: this.produto.id, produto: this.produto, qtd: this.qtd }
       console.log(itensPedido)
-      const item = { produto: this.produto, qtd: this.qtd }
-      itensPedido.push(item)
+      itensPedido.pizzas.push(item)
       localStorage.setItem('itensPedido', JSON.stringify(itensPedido))
       alert('Produto adicionado ao carrinho!')
+    },
+
+    validarItensPedido () {
+      let itensPedido = localStorage.getItem('itensPedido')
+      if (!itensPedido) {
+        itensPedido = {}
+        itensPedido.pizzas = []
+        itensPedido.bebida = []
+        localStorage.setItem('itensPedido', JSON.stringify(itensPedido))
+      }
     }
   }
 }
@@ -83,7 +91,8 @@ export default {
       font-size: xxx-large;
       margin-top: 50px;
       text-align: center;
-  }  
+  }
+  
   .visualizacao-produto {
     font-size: x-large;
   }
