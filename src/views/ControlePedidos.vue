@@ -32,8 +32,8 @@
             <th>Cliente</th>
             <th>Ação</th>
           </tr>
-          <tr>
-            <td>202203230001</td>
+          <tr v-for="entrada in pedidos.entrada" v-bind:key="entrada.id">
+            <td>{{ entrada.id }}</td>
             <td class="td-ingredientes">
               <p>1× Pizza Calamuça</p>
               <p>3× Pizza Brócoles</p>
@@ -74,8 +74,31 @@
 </template>
 
 <script>
+import PedidoService from '../services/PedidoService'
+
 export default {
-  name: 'ControlePedidos'
+  name: 'ControlePedidos',
+
+  data () {
+    return {
+      pedidos: {
+        entrada: [],
+        confirmado: [],
+        preparado: [],
+        expedido: []
+      }
+    }
+  },
+
+  async mounted () {
+    await this.buscarPedidos()
+  },
+
+  methods: {
+    async buscarPedidos () {
+      this.pedidos = await PedidoService.buscarTodosPorStatus()
+    }
+  }
 }
 </script>
 
