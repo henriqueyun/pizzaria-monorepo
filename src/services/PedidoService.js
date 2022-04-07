@@ -11,4 +11,9 @@ async function buscarTodosPorStatus () {
   return { entrada, confirmado, preparado, expedido }
 }
 
-export default { buscarTodosPorStatus }
+async function atualizarStatusPedido (pedidoId) {
+  const pedidoResponse = await axios.put(`${process.env.VUE_APP_API_URL}/pedido/${pedidoId}`)
+  return pedidoResponse.status
+}
+
+export default { buscarTodosPorStatus, atualizarStatusPedido }

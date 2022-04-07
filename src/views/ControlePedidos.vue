@@ -35,15 +35,16 @@
           <tr v-for="entrada in pedidos.entrada" v-bind:key="entrada.id">
             <td>{{ entrada.id }}</td>
             <td class="td-ingredientes">
-              <p>1× Pizza Calamuça</p>
-              <p>3× Pizza Brócoles</p>
+              <p v-for="itemPizza in entrada.pizzaItemPedidos" v-bind:key="itemPizza.id">
+                {{ itemPizza.qtd }}× {{ itemPizza.pizza.nome }}
+              </p>
             </td>
-            <td>Rapadura é doce mas não é mole não</td>
-            <td>R$ 400,00</td>
+            <td>{{ entrada.observacao}}</td>
+            <td>R$ {{ calcularValorPedido(pedidos.entrada || []) }}</td>
             <td class="td-cliente">
-              <p>Henrique Lima</p>
-              <p>11 93214-7539</p>
-              <p>Rua Altos do Oiti, 75</p>
+              <p>{{ entrada.nomeCliente}}</p>
+              <p>{{ entrada.emailCliente }}</p>
+              <p>{{ entrada.enderecoCliente }}</p>
             </td>
             <td>
               <span class="td-flex-wrapper">
@@ -97,6 +98,21 @@ export default {
   methods: {
     async buscarPedidos () {
       this.pedidos = await PedidoService.buscarTodosPorStatus()
+      console.log(this.pedidos.entrada[0])
+    },
+
+    async atualizarStatusPedido (pedidoId) {
+      await PedidoService.atualizarStatusPedido(pedidoId)
+    },
+
+    calcularValorPedido(pedidos) {
+      let valorPedido = 0
+      pedidos.forEach(pedido => {
+        pedido.pizzaItemPedidos.forEach(itemPizza => {
+          valorPedido += parseInt(itemPizza.qtd) + itemPizza.pizza.preco
+        })
+      })
+      return valorPedido
     }
   }
 }
