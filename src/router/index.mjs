@@ -17,7 +17,7 @@ router.delete('/bebida/:id', controller.bebidaController.excluir)
 
 router.post('/pedido', controller.pedidoController.cadastrar)
 router.get('/pedido/all', controller.pedidoController.buscarTodos)
-router.get('/pedido/all', controller.pedidoController.buscar)
+router.get('/pedido/:id', controller.pedidoController.buscar)
 router.patch('/pedido/:id', controller.pedidoController.atualizarStatus)
 
 export default router

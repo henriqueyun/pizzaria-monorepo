@@ -23,7 +23,7 @@ describe(`${endpoint} endpoint tests`, function () {
             ]
           },
         'debito',
-        'entrada',
+        '',
         'Sem picles'
       ))
       .end((err, res) => {

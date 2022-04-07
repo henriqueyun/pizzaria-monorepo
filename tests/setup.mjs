@@ -8,7 +8,3 @@ chai.use(chai_http)
 export const request = () => {
     return chai.request(app)
 }
-
-const setup = { expect, request }
-
-export default setup

@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize'
 import sequelize from '../sequelize.mjs'
 import PedidoModel from './pedidoModel.mjs'
 
-const PizzaItemPedido = sequelize.define('pizzaItemPedido', {
+const BebidaItemPedido = sequelize.define('bebidaItemPedido', {
   pedidoId: {
     type: DataTypes.INTEGER,
     references: {
@@ -10,10 +10,10 @@ const PizzaItemPedido = sequelize.define('pizzaItemPedido', {
       key: 'id'
     }
   },
-  pizzaId: {
+  bebidaId: {
     type: DataTypes.INTEGER,
     references: {
-      model: 'Pizza',
+      model: 'Bebida',
       key: 'id'
     }
   },
@@ -23,21 +23,17 @@ const PizzaItemPedido = sequelize.define('pizzaItemPedido', {
   }
 })
 
-import PizzaModel from './pizzaModel.mjs'
+import BebidaModel from './bebidaModel.mjs'
 
-PedidoModel.belongsToMany(PizzaModel, { through: PizzaItemPedido })
-PedidoModel.hasMany(PizzaItemPedido, {
+PedidoModel.belongsToMany(BebidaModel, { through: BebidaItemPedido })
+PedidoModel.hasMany(BebidaItemPedido, {
   foreignKey: 'pedidoId',
   sourceKey: 'id'
 })
-PizzaItemPedido.hasOne(PizzaModel, {
-  foreignKey: 'id',
-  sourceKey: 'pizzaId'
-})
 
-PizzaItemPedido.sync()
+BebidaItemPedido.sync()
   .then(() => {
-    console.log('PizzaItemPedido sincronizado')
+    console.log('BebidaItemPedido sincronizado')
   })
 
-export default PizzaItemPedido
+export default BebidaItemPedido
