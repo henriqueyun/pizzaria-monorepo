@@ -3,6 +3,7 @@ import PedidoModel from '../models/pedidoModel.mjs'
 import PizzaItemPedidoModel from '../models/pizzaItemPedidoModel.mjs'
 import BebidaItemPedidoModel from '../models/bebidaItemPedidoModel.mjs'
 import PizzaModel from '../models/pizzaModel.mjs'
+import BebidaModel from '../models/bebidaModel.mjs'
 
 import logger from '../logger.mjs'
 
@@ -86,8 +87,8 @@ export async function atualizarStatus(req, res) {
   }
   try {
     const { status } = req.body
-    await pizza.update({ status })
-    await pizza.save()
+    await pedido.update({ status })
+    await pedido.save()
       .catch(error => {
         logger.error('Erro atualizar pedido', error)
       })
@@ -119,16 +120,18 @@ export async function buscarTodos(req, res) {
         include: [{
           model: PizzaModel   
         }]
+      },
+      {
+        model: BebidaItemPedidoModel,
+        include: [{
+          model: BebidaModel   
+        }]
       }
     ]
   }).catch(error => {
       logger.error(`Erro buscar pedido ${error}`)
       return res.sendStatus(500)
     })
-
-  pedidos.forEach(pedido => {
-    console.log(`pedido ${JSON.stringify(pedido)}`)
-  })
 
   if (!pedidos.length) {
     logger.error('Pedido not found')

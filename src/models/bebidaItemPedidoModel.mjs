@@ -30,6 +30,10 @@ PedidoModel.hasMany(BebidaItemPedido, {
   foreignKey: 'pedidoId',
   sourceKey: 'id'
 })
+BebidaItemPedido.hasOne(BebidaModel, {
+  foreignKey: 'id',
+  sourceKey: 'bebidaId'
+})
 
 BebidaItemPedido.sync()
   .then(() => {
