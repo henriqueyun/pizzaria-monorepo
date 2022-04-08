@@ -34,6 +34,8 @@ export default {
       localStorage.setItem('nomeCliente', this.cliente.nome)
       localStorage.setItem('telefoneCliente', this.cliente.telefone)
       localStorage.setItem('enderecoCliente', this.cliente.endereco)
+      alert('Seus dados foram salvos!')
+      this.$router.back()
     },
 
     carregarDadosCliente () {
