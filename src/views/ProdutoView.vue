@@ -16,7 +16,9 @@
 </template>
 
 <script>
-import ProdutoService from '../services/ProdutoService'
+import PizzaService from '../services/PizzaService'
+import BebidaService from '../services/BebidaService'
+
 export default {
   data () {
     return {
@@ -41,7 +43,7 @@ export default {
     carregarDados () {
       const metodosCarregamento = {
         adicionar: async () => {
-          this.produto = await ProdutoService.get(this.$route.params.id)          
+          this.produto = await this.carregarProduto(this.$route.params.tipo_produto)
         },
         editar: () => {
           alert('Não implementado ainda')
@@ -55,6 +57,19 @@ export default {
       }
     },
 
+    carregarProduto (tipoProduto) {
+      const produtoId = this.$route.params.id
+      return {
+        pizza () {
+          return PizzaService.get(produtoId)
+        },
+
+        bebida () {
+          return BebidaService.get(produtoId)
+        }
+      }[tipoProduto]()
+    },
+
     obterPalavraComPrimeiraLetraMaiuscula(palavra) {
       if (!palavra) {
         return ''
@@ -66,11 +81,37 @@ export default {
       this.validarItensPedido()
       let itensPedido = localStorage.getItem('itensPedido')
       itensPedido = JSON.parse(itensPedido)
-      const item = { pizzaId: this.produto.id, produto: this.produto, qtd: this.qtd }
-      console.log(itensPedido)
-      itensPedido.pizzas.push(item)
+
+      if (this.$route.params.tipo_produto == 'pizza') {
+        
+        const pizza = { pizzaId: this.produto.id, produto: this.produto, qtd: this.qtd }
+
+        if (itensPedido.pizzas.some(itemPizza => itemPizza.pizzaId == pizza.pizzaId)) {
+          itensPedido.pizzas.map(itemPizza => {
+            console.log(itemPizza.pizzaId)
+            if (itemPizza.pizzaId == pizza.pizzaId) {
+              itemPizza.qtd += pizza.qtd
+            }
+            return itemPizza
+          })
+        } else {
+          console.log('not same id', pizza)
+          itensPedido.pizzas.push(pizza)
+        }
+
+        localStorage.setItem('itensPedido', JSON.stringify(itensPedido))
+        alert('Pizza adicionada ao carrinho!')
+
+      } else if (this.$route.params.tipo_produto == 'bebida') {
+        const bebida = { bebidaId: this.produto.id, produto: this.produto, qtd: this.qtd }
+        console.log(itensPedido)
+        itensPedido.bebidas.push(bebida)
+        localStorage.setItem('itensPedido', JSON.stringify(itensPedido))
+        alert ('Bebida adicionada ao carrinho!')
+      } else {
+        alert('Não identificamos esse produto :/')
+      }
       localStorage.setItem('itensPedido', JSON.stringify(itensPedido))
-      alert('Produto adicionado ao carrinho!')
     },
 
     validarItensPedido () {
@@ -78,7 +119,7 @@ export default {
       if (!itensPedido) {
         itensPedido = {}
         itensPedido.pizzas = []
-        itensPedido.bebida = []
+        itensPedido.bebidas = []
         localStorage.setItem('itensPedido', JSON.stringify(itensPedido))
       }
     }

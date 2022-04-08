@@ -23,7 +23,7 @@ const routes = [
     component: CadastrarEnderecoView
   },
   {
-    path: '/produto/:id/:action',
+    path: '/:tipo_produto/:id/:action',
     component: ProdutoView
   },
   {

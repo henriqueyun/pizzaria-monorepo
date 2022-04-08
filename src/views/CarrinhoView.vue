@@ -16,6 +16,17 @@
           <p>{{ itemPizza.produto.ingredientes }}
           <p>Valor: R$ {{ itemPizza.qtd * itemPizza.produto.preco}}</p>
         </div>
+        <div
+          v-for="itemBebida in pedido.itensPedido.bebidas"
+          v-bind:key="itemBebida.id"
+          class="item-pedido"
+        >
+          <h2>{{ itemBebida.qtd }}× {{ itemBebida.produto.nome }}</h2>
+          <p>{{ itemBebida.produto.volume }}ml</p>
+          <router-link :to="`/produto/${itemBebida.produto.id}/editar.`"><span class="btn-item-action">Editar</span></router-link>
+          <span class="btn-item-action" @click="removerItem()">Remover</span>
+          <p>Valor: R$ {{ itemBebida.qtd * itemBebida.produto.preco}}</p>
+        </div>
       </div>
       <span class="carrinho-vazio" v-else>Dê uma olhada no nosso cardápio e coloca algo aqui! 🍕</span>
       <h2>
@@ -89,7 +100,7 @@ export default {
     },
 
     limpaPedidoAtual () {
-      localStorage.setItem('itensPedido', '[]')
+      localStorage.setItem('itensPedido', '')
       this.formaPagamento = 'dinheiro'
       this.observacao = ''
       this.montarPedido()
@@ -99,8 +110,13 @@ export default {
     montarPedido() {
       this.pedido.nomeCliente = localStorage.getItem('nomeCliente')
       this.pedido.enderecoCliente = localStorage.getItem('enderecoCliente')
+      this.pedido.itensPedido = localStorage.getItem('itensPedido')
+      if (this.pedido.itensPedido) {
+        this.pedido.itensPedido = JSON.parse(this.pedido.itensPedido)
+      } else {
+        this.pedido.itensPedido = ''
+      }
       // this.pedido.emailCliente = localStorage.getItem('emailCliente') 
-      this.pedido.itensPedido = JSON.parse(localStorage.getItem('itensPedido'))
     },
 
     calcularValorTotalPedido() {

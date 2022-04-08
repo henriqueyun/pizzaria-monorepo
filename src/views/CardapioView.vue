@@ -2,6 +2,7 @@
 <section>  
     <header>
       <h1>Cardárpio</h1>
+      <h2 v-if="temPizzas">Pizzas</h2>
     </header>
     <main class="container">
       <!-- <div class="card-pizza">
@@ -59,7 +60,6 @@
           <router-link to="/adicionar_pizza/teste"><span>Pedir agora!</span></router-link>
         </span>
       </div> -->
-
       <div v-for="pizza in pizzas" v-bind:key="pizza.id" class="card-pizza">
         <span class="img-wrapper">
           <img :src="pizza.imgURL" alt="" :srcset="pizza.imgURL"  >
@@ -70,7 +70,26 @@
         </span>
         <span class="card-pizza-action">
           <h2>R$ {{ pizza.preco }}</h2>
-          <router-link :to="`/produto/${pizza.id}/adicionar`"><span>Pedir agora!</span></router-link>
+          <router-link :to="`/pizza/${pizza.id}/adicionar`"><span>Pedir agora!</span></router-link>
+        </span>
+      </div> 
+    </main>
+    <header v-if="temBebidas">
+      <h2>Bebidas</h2>
+    </header>
+    <main class="container">
+      <div v-for="bebida in bebidas" v-bind:key="bebida.id" class="card-pizza">
+        <span class="img-wrapper">
+          <img :src="bebida.imgURL" alt="" :srcset="bebida.imgURL"  >
+        </span>
+        <span class="card-pizza-text">
+          <h2>{{ bebida.nome }}</h2>
+          <p>{{ bebida.volume }}ml</p>
+          <b>{{ isAlcoolica(bebida.alcoolica) }}</b>
+        </span>
+        <span class="card-pizza-action">
+          <h2>R$ {{ bebida.preco }}</h2>
+          <router-link :to="`/bebida/${bebida.id}/adicionar`"><span>Pedir agora!</span></router-link>
         </span>
       </div> 
     </main>
@@ -78,23 +97,46 @@
 </template>
 
 <script>
+import BebidaService from '../services/BebidaService'
+
 export default {
   data () {
     return {
       pizzas: [
         { id: 1, sabor: 'Muçarela', ingredientes: 'Queijo muçarela, molho de tomates, tomates, azeitonas', preco: '42.00', imgURL: '/pizza1.png'}
-      ]
+      ],
+
+      bebidas: []
+    }
+  },
+
+  computed: {
+    temPizzas () {
+      return this.pizzas.length
+    },
+
+    temBebidas () {
+      return this.bebidas?.length
     }
   },
 
   mounted () {
     this.buscarPizzas()
+    this.buscarBebidas()
   },
 
   methods: {
     async buscarPizzas() {
       const pizzasResponse = await this.$axios.get(`${process.env.VUE_APP_MIDDLEWARE_API_URL}/api/v1/pizza/all`)
       this.pizzas = pizzasResponse.data
+    },
+
+    async buscarBebidas() {
+      this.bebidas = await BebidaService.getAll()
+    },
+
+    isAlcoolica(alcoolica) {
+      return alcoolica ? 'Alcoólica' : 'Não alcoólica'
     }
   }
 }
@@ -147,6 +189,12 @@ export default {
 
 header h1 {
   font-size: xxx-large;
+  margin-top: 50px;
+  text-align: center;
+}
+
+header h2 {
+  font-size: xx-large;
   margin-top: 50px;
   text-align: center;
 }
