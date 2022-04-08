@@ -4,25 +4,6 @@
     <br/>
     <section>
       <div class="section-status">Entrada<div class="section-divider"></div></div>
-      <!-- <ul class="list-items"> -->
-        <!-- <li>
-          <p>Pedido nº 202203230001</p>
-          <p>
-            1× Pizza Calamuça
-            3× Pizza Brócoles
-          </p>
-          <p>
-            Rapadura é doce mas não é mole não
-          </p>
-          <p>
-            R$ 400,00
-          </p>
-          <p>
-            Henrique Lima
-            11 93214-7539
-            Rua Altos do Oiti, 75
-          </p>
-        </li> -->
         <table>
           <tr>
             <th>Número</th>
@@ -32,7 +13,7 @@
             <th>Cliente</th>
             <th>Ação</th>
           </tr>
-          <tr v-for="entrada in pedidos.entrada" v-bind:key="entrada.id">
+          <tr v-for="entrada in pedidos.entradas" v-bind:key="entrada.id">
             <td>{{ entrada.id }}</td>
             <td class="td-ingredientes">
               <p v-for="itemPizza in entrada.pizzaItemPedidos" v-bind:key="itemPizza.id">
@@ -40,7 +21,7 @@
               </p>
             </td>
             <td>{{ entrada.observacao}}</td>
-            <td>R$ {{ calcularValorPedido(pedidos.entrada || []) }}</td>
+            <td>R$ {{ calcularValorPedido(pedidos.entradas || []) }}</td>
             <td class="td-cliente">
               <p>{{ entrada.nomeCliente}}</p>
               <p>{{ entrada.emailCliente }}</p>
@@ -48,28 +29,133 @@
             </td>
             <td>
               <span class="td-flex-wrapper">
-                <button>Confirmar</button>
-                <button>Recusar</button>
+                <button @click="atualizarStatusPedido(entrada.id, 'confirmado')">Confirmar</button>
+                <button @click="atualizarStatusPedido(entrada.id, 'recusado')">Recusar</button>
               </span>
             </td>
           </tr>
         </table>
       <!-- </ul> -->
     </section>
+
+
     <section>
       <div class="section-status">Confirmado<div class="section-divider"></div></div>
-      <ul class="list-items">
-      </ul>
+        <table>
+          <tr>
+            <th>Número</th>
+            <th>Itens</th>
+            <th>Observação</th>
+            <th>Valor</th>
+            <th>Cliente</th>
+            <th>Ação</th>
+          </tr>
+          <tr v-for="confirmado in pedidos.confirmados" v-bind:key="confirmado.id">
+            <td>{{ confirmado.id }}</td>
+            <td class="td-ingredientes">
+              <p v-for="itemPizza in confirmado.pizzaItemPedidos" v-bind:key="itemPizza.id">
+                {{ itemPizza.qtd }}× {{ itemPizza.pizza.nome }}
+              </p>
+              <p v-for="itemBebida in confirmado.bebidaItemPedidos" v-bind:key="itemBebida.id">
+                {{ itemBebida.qtd }}× {{ itemBebida.bebida.nome }}
+              </p>
+            </td>
+            <td>{{ confirmado.observacao}}</td>
+            <td>
+              R$ {{ calcularValorPedido(pedidos.confirmados || []) }}
+              {{ confirmado.formaPagamento }}
+            </td>
+            <td class="td-cliente">
+              <p>{{ confirmado.nomeCliente}}</p>
+              <p>{{ confirmado.emailCliente }}</p>
+              <p>{{ confirmado.enderecoCliente }}</p>
+            </td>
+            <td>
+              <span class="td-flex-wrapper">
+                <button @click="atualizarStatusPedido(confirmado.id, 'preparo')">Confirmar</button>
+              </span>
+            </td>
+          </tr>
+        </table>
     </section>
+
     <section>
       <div class="section-status">Preparando<div class="section-divider"></div></div>
-      <ul class="list-items">
-      </ul>
+        <table>
+          <tr>
+            <th>Número</th>
+            <th>Itens</th>
+            <th>Observação</th>
+            <th>Valor</th>
+            <th>Cliente</th>
+            <th>Ação</th>
+          </tr>
+          <tr v-for="preparando in pedidos.emPreparo" v-bind:key="preparando.id">
+            <td>{{ preparando.id }}</td>
+            <td class="td-ingredientes">
+              <p v-for="itemPizza in preparando.pizzaItemPedidos" v-bind:key="itemPizza.id">
+                {{ itemPizza.qtd }}× {{ itemPizza.pizza.nome }}
+              </p>
+              <p v-for="itemBebida in preparando.bebidaItemPedidos" v-bind:key="itemBebida.id">
+                {{ itemBebida.qtd }}× {{ itemBebida.bebida.nome }}
+              </p>
+            </td>
+            <td>{{ preparando.observacao}}</td>
+            <td>
+              R$ {{ calcularValorPedido(pedidos.emPreparo || []) }}
+              {{ preparando.formaPagamento }}
+            </td>
+            <td class="td-cliente">
+              <p>{{ preparando.nomeCliente}}</p>
+              <p>{{ preparando.emailCliente }}</p>
+              <p>{{ preparando.enderecoCliente }}</p>
+            </td>
+            <td>
+              <span class="td-flex-wrapper">
+                <button @click="atualizarStatusPedido(preparando.id, 'expedido')">Confirmar</button>
+              </span>
+            </td>
+          </tr>
+        </table>
     </section>
     <section>
       <div class="section-status">Expedido<div class="section-divider"></div></div>
-      <ul class="list-items">
-      </ul>
+        <table>
+          <tr>
+            <th>Número</th>
+            <th>Itens</th>
+            <th>Observação</th>
+            <th>Valor</th>
+            <th>Cliente</th>
+            <th>Ação</th>
+          </tr>
+          <tr v-for="expedido in pedidos.expedidos" v-bind:key="expedido.id">
+            <td>{{ expedido.id }}</td>
+            <td class="td-ingredientes">
+              <p v-for="itemPizza in expedido.pizzaItemPedidos" v-bind:key="itemPizza.id">
+                {{ itemPizza.qtd }}× {{ itemPizza.pizza.nome }}
+              </p>
+              <p v-for="itemBebida in expedido.bebidaItemPedidos" v-bind:key="itemBebida.id">
+                {{ itemBebida.qtd }}× {{ itemBebida.bebida.nome }}
+              </p>
+            </td>
+            <td>{{ expedido.observacao}}</td>
+            <td>
+              R$ {{ calcularValorPedido(pedidos.expedidos || []) }}
+              {{ expedido.formaPagamento }}
+            </td>
+            <td class="td-cliente">
+              <p>{{ expedido.nomeCliente}}</p>
+              <p>{{ expedido.emailCliente }}</p>
+              <p>{{ expedido.enderecoCliente }}</p>
+            </td>
+            <td>
+              <span class="td-flex-wrapper">
+                <button @click="atualizarStatusPedido(expedido.id, 'entregue')">Confirmar</button>
+              </span>
+            </td>
+          </tr>
+        </table>
     </section>
   </div>
 </template>
@@ -83,10 +169,10 @@ export default {
   data () {
     return {
       pedidos: {
-        entrada: [],
-        confirmado: [],
-        preparado: [],
-        expedido: []
+        entradas: [],
+        confirmados: [],
+        emPreparo: [],
+        expedidos: []
       }
     }
   },
@@ -98,11 +184,11 @@ export default {
   methods: {
     async buscarPedidos () {
       this.pedidos = await PedidoService.buscarTodosPorStatus()
-      console.log(this.pedidos.entrada[0])
     },
 
-    async atualizarStatusPedido (pedidoId) {
-      await PedidoService.atualizarStatusPedido(pedidoId)
+    async atualizarStatusPedido (pedidoId, status) {
+      await PedidoService.atualizarStatusPedido(pedidoId, status)
+      await this.buscarPedidos()
     },
 
     calcularValorPedido(pedidos) {
@@ -111,6 +197,9 @@ export default {
         pedido.pizzaItemPedidos.forEach(itemPizza => {
           valorPedido += parseInt(itemPizza.qtd) + itemPizza.pizza.preco
         })
+        pedido.bebidaItemPedidos.forEach(itemBebida => {
+          valorPedido += parseInt(itemBebida.qtd) + itemBebida.bebida.preco
+        })        
       })
       return valorPedido
     }
