@@ -101,13 +101,14 @@ export default {
 
         localStorage.setItem('itensPedido', JSON.stringify(itensPedido))
         alert('Pizza adicionada ao carrinho!')
-
+        this.$router.back()
       } else if (this.$route.params.tipo_produto == 'bebida') {
         const bebida = { bebidaId: this.produto.id, produto: this.produto, qtd: this.qtd }
         console.log(itensPedido)
         itensPedido.bebidas.push(bebida)
         localStorage.setItem('itensPedido', JSON.stringify(itensPedido))
         alert ('Bebida adicionada ao carrinho!')
+        this.$router.back()
       } else {
         alert('Não identificamos esse produto :/')
       }
