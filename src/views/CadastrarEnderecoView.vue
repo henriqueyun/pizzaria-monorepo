@@ -36,6 +36,7 @@ export default {
       localStorage.setItem('enderecoCliente', this.cliente.endereco)
       alert('Seus dados foram salvos!')
       this.$router.back()
+      
     },
 
     carregarDadosCliente () {
