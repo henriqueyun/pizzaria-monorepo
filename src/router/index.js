@@ -6,6 +6,7 @@ import CardapioView from '../views/CardapioView.vue'
 import CadastrarEnderecoView from '../views/CadastrarEnderecoView.vue'
 import ProdutoView from '../views/ProdutoView.vue'
 import CarrinhoView from '../views/CarrinhoView.vue'
+import RastrearPedidoView from '../views/RastrearPedidoView.vue'
 
 Vue.use(VueRouter)
 
@@ -29,7 +30,11 @@ const routes = [
   {
     path: '/carrinho',
     component: CarrinhoView
-  },  
+  },
+  {
+    path: '/rastrear',
+    component: RastrearPedidoView
+  },
   {
     // will match everything
     path: '*',

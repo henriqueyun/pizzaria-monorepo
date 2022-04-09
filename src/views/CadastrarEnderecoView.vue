@@ -59,6 +59,7 @@ export default {
   }
 
   .cadastrar-endereco input {
+    margin-top: 1em;
     padding: 5px;
     width: 100%;
     font-size: large;
