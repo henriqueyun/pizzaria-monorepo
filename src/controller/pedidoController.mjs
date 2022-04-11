@@ -100,7 +100,21 @@ export async function atualizarStatus(req, res) {
 }
 
 export async function buscar(req, res) {
-  const pedido = await PedidoModel.findOne({ where: { id: req.params.id } })
+  const pedido = await PedidoModel.findOne({ where: { id: req.params.id },
+    include: [
+      {
+        model: PizzaItemPedidoModel,
+        include: [{
+          model: PizzaModel   
+        }]
+      },
+      {
+        model: BebidaItemPedidoModel,
+        include: [{
+          model: BebidaModel   
+        }]
+      }
+    ]})
     .catch(error => {
       logger.error('Erro buscar pedido!', error)
       return res.sendStatus(500)
