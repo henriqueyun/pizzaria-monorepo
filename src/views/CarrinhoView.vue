@@ -11,8 +11,10 @@
           class="item-pedido"
         >
           <h2>{{ itemPizza.qtd }}× {{ itemPizza.produto.nome }}</h2>
-          <router-link :to="`/produto/${itemPizza.produto.id}/editar.`"><span class="btn-item-action">Editar</span></router-link>
-          <span class="btn-item-action" @click="removerItem()">Remover</span>
+          <router-link :to="{ path: `/pizza/${itemPizza.produto.id}/editar`, query: { pizzaId: itemPizza.pizzaId }}">
+            <span class="btn-item-action">Editar</span>
+          </router-link>
+          <span class="btn-item-action" @click="removerPizza(itemPizza.produto.id)">Remover</span>
           <p>{{ itemPizza.produto.ingredientes }}
           <p>Valor: R$ {{ itemPizza.qtd * itemPizza.produto.preco}}</p>
         </div>
@@ -23,8 +25,10 @@
         >
           <h2>{{ itemBebida.qtd }}× {{ itemBebida.produto.nome }}</h2>
           <p>{{ itemBebida.produto.volume }}ml</p>
-          <router-link :to="`/produto/${itemBebida.produto.id}/editar.`"><span class="btn-item-action">Editar</span></router-link>
-          <span class="btn-item-action" @click="removerItem()">Remover</span>
+          <router-link :to="{ path: `/bebida/${itemBebida.produto.id}/editar`, query: { bebidaId: itemBebida.bebidaId }}">
+            <span class="btn-item-action">Editar</span>
+          </router-link>
+          <span class="btn-item-action" @click="removerBebida(itemBebida.produto.id)">Remover</span>
           <p>Valor: R$ {{ itemBebida.qtd * itemBebida.produto.preco}}</p>
         </div>
       </div>
@@ -71,14 +75,13 @@ export default {
   },
 
   computed: {
-    pedidoTemProdutos() {
+    pedidoTemProdutos () {
       return this.pedido.itensPedido?.pizzas?.length || this.pedido.itensPedido?.bebidas?.length
     }
   },
 
   mounted () {
     this.montarPedido()
-    this.calcularValorTotalPedido()
   },
 
   methods: {
@@ -116,10 +119,11 @@ export default {
       } else {
         this.pedido.itensPedido = ''
       }
-      // this.pedido.emailCliente = localStorage.getItem('emailCliente') 
+      this.calcularValorTotalPedido()
     },
 
     calcularValorTotalPedido() {
+      this.valorTotal = 0
       if (this.pedido.itensPedido?.pizzas?.length) {
         this.pedido.itensPedido.pizzas
           .map(pizza => {
@@ -141,6 +145,20 @@ export default {
             this.valorTotal += bebida.produto.preco * bebida.qtd
         })
       }
+    },
+
+    removerPizza(pizzaId) {
+      const itensPedido = JSON.parse(localStorage.itensPedido)
+      itensPedido.pizzas = itensPedido.pizzas.filter(itemPizza => itemPizza.pizzaId !== pizzaId)
+      localStorage.setItem('itensPedido', JSON.stringify(itensPedido))
+      this.montarPedido()
+    },
+
+    removerBebida(bebidaId) {
+      const itensPedido = JSON.parse(localStorage.itensPedido)
+      itensPedido.bebidas = itensPedido.bebidas.filter(itemBebida => itemBebida.bebidaId !== bebidaId)
+      localStorage.setItem('itensPedido', JSON.stringify(itensPedido))
+      this.montarPedido()
     }
   }
 };
