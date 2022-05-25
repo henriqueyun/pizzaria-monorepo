@@ -1,0 +1,42 @@
+version: "3"
+
+services:
+        #  front-pizzaria-admin:
+        #    hostname: frontend-admin
+        #    image: front-pizzaria-admin:18-05
+        #    ports:
+        #      - 8081:8080
+        #    depends_on:
+        #      - backend-pizzaria
+        #
+        #  front-pizzaria-cliente:
+        #    hostname: frontend-cliente
+        #    image: front-pizzaria-cliente:18-05
+        #    ports:
+        #      - 8082:8080
+        #    depends_on:
+        #      - backend-pizzaria
+
+  backend-pizzaria:
+    container_name: backend-pizzaria
+    build: ./
+    environment: 
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=root
+      - DB_PORT=3306
+      - DB_NAME=pizzaria
+    ports: 
+      - 8010:8000
+    volumes:
+      - "./src:/app/src"
+    depends_on:
+      - db
+  db:
+    container_name: db-pizzaria
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=pizzaria
+    ports:
+      - 3306:3306
