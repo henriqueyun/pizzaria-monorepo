@@ -21,10 +21,10 @@
               </p>
             </td>
             <td>{{ entrada.observacao}}</td>
-            <td>R$ {{ calcularValorPedido(pedidos.entradas || []) }}</td>
+            <td>R$ {{ calcularValorPedido(entrada) }}</td>
             <td class="td-cliente">
               <p>{{ entrada.nomeCliente}}</p>
-              <p>{{ entrada.emailCliente }}</p>
+              <p>{{ entrada.telefoneCliente }}</p>
               <p>{{ entrada.enderecoCliente }}</p>
             </td>
             <td>
@@ -62,12 +62,12 @@
             </td>
             <td>{{ confirmado.observacao}}</td>
             <td>
-              R$ {{ calcularValorPedido(pedidos.confirmados || []) }}
+              R$ {{ calcularValorPedido(confirmado) }}
               {{ confirmado.formaPagamento }}
             </td>
             <td class="td-cliente">
               <p>{{ confirmado.nomeCliente}}</p>
-              <p>{{ confirmado.emailCliente }}</p>
+              <p>{{ confirmado.telefoneCliente }}</p>
               <p>{{ confirmado.enderecoCliente }}</p>
             </td>
             <td>
@@ -102,12 +102,12 @@
             </td>
             <td>{{ preparando.observacao}}</td>
             <td>
-              R$ {{ calcularValorPedido(pedidos.emPreparo || []) }}
+              R$ {{ calcularValorPedido(preparando) }}
               {{ preparando.formaPagamento }}
             </td>
             <td class="td-cliente">
               <p>{{ preparando.nomeCliente}}</p>
-              <p>{{ preparando.emailCliente }}</p>
+              <p>{{ preparando.telefoneCliente }}</p>
               <p>{{ preparando.enderecoCliente }}</p>
             </td>
             <td>
@@ -141,12 +141,12 @@
             </td>
             <td>{{ expedido.observacao}}</td>
             <td>
-              R$ {{ calcularValorPedido(pedidos.expedidos || []) }}
+              R$ {{ calcularValorPedido(expedido) }}
               {{ expedido.formaPagamento }}
             </td>
             <td class="td-cliente">
               <p>{{ expedido.nomeCliente}}</p>
-              <p>{{ expedido.emailCliente }}</p>
+              <p>{{ expedido.telefoneCliente }}</p>
               <p>{{ expedido.enderecoCliente }}</p>
             </td>
             <td>
@@ -178,12 +178,17 @@ export default {
   },
 
   async mounted () {
-    await this.buscarPedidos()
+    try {
+      await this.buscarPedidos()
+    } catch (err) {
+      console.error(err)
+    }
   },
 
   methods: {
     async buscarPedidos () {
       this.pedidos = await PedidoService.buscarTodosPorStatus()
+      setTimeout(this.buscarPedidos, 10000)
     },
 
     async atualizarStatusPedido (pedidoId, status) {
@@ -191,16 +196,14 @@ export default {
       await this.buscarPedidos()
     },
 
-    calcularValorPedido(pedidos) {
+    calcularValorPedido(pedido) {
       let valorPedido = 0
-      pedidos.forEach(pedido => {
         pedido.pizzaItemPedidos.forEach(itemPizza => {
-          valorPedido += parseInt(itemPizza.qtd) + itemPizza.pizza.preco
+          valorPedido += parseInt(itemPizza.qtd) * itemPizza.pizza.preco
         })
         pedido.bebidaItemPedidos.forEach(itemBebida => {
-          valorPedido += parseInt(itemBebida.qtd) + itemBebida.bebida.preco
-        })        
-      })
+          valorPedido += parseInt(itemBebida.qtd) * itemBebida.bebida.preco
+        })
       return valorPedido
     }
   }
