@@ -3,7 +3,6 @@ import Pedido from '../src/classes/Pedido.mjs'
 // import Cliente from '../src/classes/Cliente.mjs'
 import { expect, request } from './setup.mjs'
 
-let pedidoId;
 const endpoint = '/api/v1/pedido'
 
 describe(`${endpoint} endpoint tests`, function () {

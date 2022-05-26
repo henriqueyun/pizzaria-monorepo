@@ -17,10 +17,6 @@ const PizzaModel = sequelize.define('pizza', {
   ingredientes: {
     type: DataTypes.STRING,
     allowNull: true
-  },
-  saborAdicional: {
-    type: DataTypes.STRING,
-    allowNull: true
   }
 })
 

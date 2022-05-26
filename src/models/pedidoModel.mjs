@@ -10,8 +10,8 @@ const PedidoModel = sequelize.define('pedido', {
     type: DataTypes.STRING,
     allowNull: false
   },
-  emailCliente: {
-    type: DataTypes.STRING,
+  telefoneCliente: {
+    type: DataTypes.BIGINT,
     allowNull: false
   },
   formaPagamento: {

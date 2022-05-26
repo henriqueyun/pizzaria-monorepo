@@ -31,7 +31,8 @@ services:
     volumes:
       - "./src:/app/src"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
   db:
     container_name: db-pizzaria
     image: mysql:8.0
@@ -40,3 +41,9 @@ services:
       - MYSQL_DATABASE=pizzaria
     ports:
       - 3306:3306
+    cap_add:
+      - SYS_NICE
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 30

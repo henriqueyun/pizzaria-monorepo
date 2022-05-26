@@ -20,4 +20,11 @@ router.get('/pedido/all', controller.pedidoController.buscarTodos)
 router.get('/pedido/:id', controller.pedidoController.buscar)
 router.patch('/pedido/:id', controller.pedidoController.atualizarStatus)
 
+router.post('/auth/login', controller.authController.login)
+router.post('/auth/authorize', controller.authController.authorize)
+router.post('/auth/logout', controller.authController.logout)
+
+router.get('/health', (req, res) => {
+  res.send('Health Ok!')
+})
 export default router
