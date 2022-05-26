@@ -3,9 +3,9 @@ import PizzaModel from '../models/pizzaModel.mjs'
 import logger from '../logger.mjs'
 
 export async function cadastrar(req, res) {
-  const { nome, preco, imgURL, ingredientes, saborAdicional } = req.body
+  const { nome, preco, imgURL, ingredientes } = req.body
 
-  const pizza = new Pizza(nome, preco, imgURL, ingredientes, saborAdicional)
+  const pizza = new Pizza(nome, preco, imgURL, ingredientes)
   const novaPizza = PizzaModel.build(pizza)
   
   await novaPizza.save()

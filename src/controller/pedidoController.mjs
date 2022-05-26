@@ -8,25 +8,29 @@ import BebidaModel from '../models/bebidaModel.mjs'
 import logger from '../logger.mjs'
 
 export async function cadastrar(req, res) {
-  const { nomeCliente,
+  const {
+    nomeCliente,
     enderecoCliente,
-    emailCliente,
+    telefoneCliente,
     formaPagamento,
-    observacao } = req.body
-  
-  const status = 'entrada'
-  
-  const { itensPedido } = req.body
+    observacao
+  } = req.body
 
+  const status = 'entrada'
+
+  const {
+    itensPedido
+  } = req.body
+  
   const pedido =
     new Pedido(nomeCliente,
       enderecoCliente,
-      emailCliente,
+      telefoneCliente,
       itensPedido,
       formaPagamento,
       status,
       observacao)
-  
+
   const novoPedido = PedidoModel.build(pedido)
   await novoPedido.save()
     .catch(error => {
@@ -35,22 +39,24 @@ export async function cadastrar(req, res) {
     })
 
   try {
-    cadastrarItensPizza(pedido.itensPedido.pizzas, novoPedido.id)
-    cadastrarItensBebida(pedido.itensPedido.bebidas, novoPedido.id)
+    await cadastrarItensPizza(pedido.itensPedido.pizzas, novoPedido.id)
+    await cadastrarItensBebida(pedido.itensPedido.bebidas, novoPedido.id)
   } catch (error) {
     return res.sendStatus(500)
   }
 
-  return res.status(201).json({ id: novoPedido.id })
+  return res.status(201).json({
+    id: novoPedido.id
+  })
 }
 
 async function cadastrarItensPizza(pizzas, pedidoId) {
   pizzas.map(pizza => {
     pizza.pedidoId = pedidoId
     return pizza
-  })  
-  
-  pizzas.forEach(async (itemPizza) => {
+  })
+
+  await pizzas.forEach(async (itemPizza) => {
     const novoItemPizza = PizzaItemPedidoModel.build(itemPizza)
     await novoItemPizza.save()
       .catch(error => {
@@ -59,15 +65,15 @@ async function cadastrarItensPizza(pizzas, pedidoId) {
   })
 }
 
-function cadastrarItensBebida(bebidas, pedidoId) {
+async function cadastrarItensBebida(bebidas, pedidoId) {
+
   bebidas.map(bebida => {
     bebida.pedidoId = pedidoId
     return bebida
-  })  
-  
-  bebidas.forEach(async (itemBebida) => {
+  })
+
+  await bebidas.forEach(async (itemBebida) => {
     const novoItemBebida = BebidaItemPedidoModel.build(itemBebida)
-    console.log(novoItemBebida)
     await novoItemBebida.save()
       .catch(error => {
         return Promise.reject(`Erro ao cadastrar item bebida ${error}`)
@@ -76,18 +82,26 @@ function cadastrarItensBebida(bebidas, pedidoId) {
 }
 
 export async function atualizarStatus(req, res) {
-  const pedido = await PedidoModel.findOne({ where: { id: req.params.id } })
+  const pedido = await PedidoModel.findOne({
+      where: {
+        id: req.params.id
+      }
+    })
     .catch(error => {
       logger.error('Erro buscar pedido', error)
       return res.sendStatus(500)
     })
-  
+
   if (!pedido) {
     return res.sendStatus(404)
   }
   try {
-    const { status } = req.body
-    await pedido.update({ status })
+    const {
+      status
+    } = req.body
+    await pedido.update({
+      status
+    })
     await pedido.save()
       .catch(error => {
         logger.error('Erro atualizar pedido', error)
@@ -100,21 +114,24 @@ export async function atualizarStatus(req, res) {
 }
 
 export async function buscar(req, res) {
-  const pedido = await PedidoModel.findOne({ where: { id: req.params.id },
-    include: [
-      {
-        model: PizzaItemPedidoModel,
-        include: [{
-          model: PizzaModel   
-        }]
+  const pedido = await PedidoModel.findOne({
+      where: {
+        id: req.params.id
       },
-      {
-        model: BebidaItemPedidoModel,
-        include: [{
-          model: BebidaModel   
-        }]
-      }
-    ]})
+      include: [{
+          model: PizzaItemPedidoModel,
+          include: [{
+            model: PizzaModel
+          }]
+        },
+        {
+          model: BebidaItemPedidoModel,
+          include: [{
+            model: BebidaModel
+          }]
+        }
+      ]
+    })
     .catch(error => {
       logger.error('Erro buscar pedido!', error)
       return res.sendStatus(500)
@@ -128,24 +145,23 @@ export async function buscar(req, res) {
 export async function buscarTodos(req, res) {
 
   const pedidos = await PedidoModel.findAll({
-    include: [
-      {
+    include: [{
         model: PizzaItemPedidoModel,
         include: [{
-          model: PizzaModel   
+          model: PizzaModel
         }]
       },
       {
         model: BebidaItemPedidoModel,
         include: [{
-          model: BebidaModel   
+          model: BebidaModel
         }]
       }
     ]
   }).catch(error => {
-      logger.error(`Erro buscar pedido ${error}`)
-      return res.sendStatus(500)
-    })
+    logger.error(`Erro buscar pedido ${error}`)
+    return res.sendStatus(500)
+  })
 
   if (!pedidos.length) {
     logger.error('Pedido not found')
@@ -155,5 +171,10 @@ export async function buscarTodos(req, res) {
   return res.status(200).json(pedidos)
 }
 
-const pedidoController = { cadastrar, atualizarStatus, buscar, buscarTodos }
+const pedidoController = {
+  cadastrar,
+  atualizarStatus,
+  buscar,
+  buscarTodos
+}
 export default pedidoController
