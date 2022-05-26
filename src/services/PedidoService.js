@@ -2,12 +2,22 @@ const axios = require('axios')
 
 class PedidoService {
   static async post(pedido) {
-    return await axios.post(`${process.env.VUE_APP_MIDDLEWARE_API_URL}/api/v1/pedido`, pedido)
+    const response = await axios.post(`${process.env.VUE_APP_API_URL}/api/v1/pedido`, pedido)
+      .catch(err => {
+        console.error(err)
+      })
+    return response
   }
 
   static async get(id) {
-    const pedidoResponse = await axios.get(`${process.env.VUE_APP_MIDDLEWARE_API_URL}/api/v1/pedido/${id}`)
-    return pedidoResponse.data
+    let pedidoResponse 
+    try {
+      pedidoResponse = await axios.get(`${process.env.VUE_APP_API_URL}/api/v1/pedido/${id}`)
+      return pedidoResponse.data
+    } catch(err) {
+      console.error(err)
+      throw new Error(err.message)  
+    }
   }
 }
 

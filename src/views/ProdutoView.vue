@@ -9,7 +9,7 @@
       <label for="precoProduto">Preço:</label><br/>
       <input type="text" disabled name="precoProduto" :value="produto.preco" placeholder="Carregando informações..."/>
       <label for="qtd">Quantidade:</label><br/>
-      <input v-model="qtd" type="number" name="qtd" min="0" max="99" value="1"/><br/>
+      <input v-model="qtd" type="number" name="qtd" min="1" max="99" value="1"/><br/>
       <span v-if="action == 'adicionar'" @click="adicionarItem()">Concluir</span>
       <span v-else @click="atualizarItem()">Salvar</span>
     </main>

@@ -62,7 +62,7 @@ export default {
         id: '',
         nomeCliente: '',
         enderecoCliente: '',
-        emailCliente: 'mock@gmail.com',
+        telefoneCliente: '',
         itensPedido: {
           pizzas:[],
           bebidas:[]
@@ -113,6 +113,7 @@ export default {
     montarPedido() {
       this.pedido.nomeCliente = localStorage.getItem('nomeCliente')
       this.pedido.enderecoCliente = localStorage.getItem('enderecoCliente')
+      this.pedido.telefoneCliente = localStorage.getItem('telefoneCliente')
       this.pedido.itensPedido = localStorage.getItem('itensPedido')
       if (this.pedido.itensPedido) {
         this.pedido.itensPedido = JSON.parse(this.pedido.itensPedido)

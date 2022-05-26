@@ -25,6 +25,7 @@ export default ({
 }
 
 .container {
+  background-color: white;
   max-width: 1076px;
   margin: 0 auto;
   /* background-color: tomato; */
@@ -41,4 +42,5 @@ export default ({
 a {
   text-decoration: none;
 }
+
 </style>
