@@ -19,10 +19,11 @@ docker compose up
 
 Em primeiro lugar, para disponibilizar a aplicação no host local diretamente é fundamental atribuir corretamente as variáveis no arquivo [./env](./.env), uma vez que as variáveis estejam inicializadas, basta executar:
 ```
+# .env configurado e database "pizzaria" criado
 npm install
 npm run dev
 ```
-> É obrigatório que para rodar dessa forma haja um servidor MySQL em funcionamento, que seja criado um banco dados conforme o arquivo [create-db.sql](./db/create-db.sql) e que sejam informadas credenciais válidas para conectar-se à ele no arquivo [./env](./.env).
+> É **obrigatório** que para rodar dessa forma haja um servidor MySQL em funcionamento, que seja criado um banco dados conforme o arquivo [create-db.sql](./db/create-db.sql) e que sejam informadas credenciais válidas para conectar-se à ele no arquivo [./env](./.env).
 
 ## Desenvolvendo
 
