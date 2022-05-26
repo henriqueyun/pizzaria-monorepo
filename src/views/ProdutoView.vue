@@ -1,16 +1,17 @@
 <template>
   <section class="visualizacao-produto">
     <header>
-      <h1>{{ obterPalavraComPrimeiraLetraMaiuscula(action)}} {{ obterPalavraComPrimeiraLetraMaiuscula(produto.tipo) }}</h1>
+      <h1>{{ obterPalavraComPrimeiraLetraMaiuscula(action) }} {{ obterPalavraComPrimeiraLetraMaiuscula(tipoProduto) }}</h1>
     </header>
     <main class="simple-container">
-      <label v-if="produto.tipo" for="nomeProduto">{{ ['pizza', 'esfiha'].includes(produto.tipo.toLowerCase()) ? 'Sabor:' : 'Nome:' }}</label><br/>
+      <label for="nomeProduto">{{ tipoProduto == 'pizza' ? 'Sabor:' : 'Nome:' }}</label><br/>
       <input type="text" disabled name="nomeProduto" :value="produto.nome" placeholder="Carregando informações..."/>
       <label for="precoProduto">Preço:</label><br/>
       <input type="text" disabled name="precoProduto" :value="produto.preco" placeholder="Carregando informações..."/>
       <label for="qtd">Quantidade:</label><br/>
-      <input v-model="qtd" type="number" name="qtd" min="0" max="99" value="1"/><br/>
-      <span @click="adicionarItem()">Adicionar ao carrinho</span>
+      <input v-model="qtd" type="number" name="qtd" min="1" max="99" value="1"/><br/>
+      <span v-if="action == 'adicionar'" @click="adicionarItem()">Concluir</span>
+      <span v-else @click="atualizarItem()">Salvar</span>
     </main>
   </section>
 </template>
@@ -24,8 +25,8 @@ export default {
     return {
       produto: {
         nome: '',
-        tipo: ''
       },
+      tipoProduto: this.$route.params.tipo_produto,
       qtd: 1,
       itemPedido: {},
       action: this.$route.params.action,
@@ -34,6 +35,7 @@ export default {
   },
 
   mounted() {
+
     this.carregarDados()
     this.validarItensPedido()
   },
@@ -46,14 +48,29 @@ export default {
           this.produto = await this.carregarProduto(this.$route.params.tipo_produto)
         },
         editar: () => {
-          alert('Não implementado ainda')
+          const itensPedido = JSON.parse(localStorage.getItem('itensPedido'))
+          let itemPedido = {}
+          // pizza
+          if (this.$route.query.pizzaId) {
+            itemPedido = itensPedido.pizzas.find(itemPizza => itemPizza.pizzaId == this.$route.query.pizzaId)
+            this.produto = itemPedido.produto
+            this.qtd = itemPedido.qtd
+          } // bebida
+          else if (this.$route.query.bebidaId) {
+            itemPedido = itensPedido.bebidas.find(itemBebida => itemBebida.bebidaId == this.$route.query.bebidaId)
+            this.produto = itemPedido.produto
+            this.qtd = itemPedido.qtd
+          } // não identificado
+          else {
+            alert('Esse item do carrinho está com problemas')
+          }
         }
       }
       if (this.$route.params.action in metodosCarregamento) {
         metodosCarregamento[this.$route.params.action]()
       } else {
         alert('Ação não encontrada, volte à página inicial e tente novamente.')
-        window.location = '/'
+        this.$router.back()
       }
     },
 
@@ -88,14 +105,12 @@ export default {
 
         if (itensPedido.pizzas.some(itemPizza => itemPizza.pizzaId == pizza.pizzaId)) {
           itensPedido.pizzas.map(itemPizza => {
-            console.log(itemPizza.pizzaId)
             if (itemPizza.pizzaId == pizza.pizzaId) {
-              itemPizza.qtd += pizza.qtd
+              itemPizza.qtd = parseInt(itemPizza.qtd) + parseInt(pizza.qtd)
             }
             return itemPizza
           })
         } else {
-          console.log('not same id', pizza)
           itensPedido.pizzas.push(pizza)
         }
 
@@ -104,10 +119,52 @@ export default {
         this.$router.back()
       } else if (this.$route.params.tipo_produto == 'bebida') {
         const bebida = { bebidaId: this.produto.id, produto: this.produto, qtd: this.qtd }
-        console.log(itensPedido)
-        itensPedido.bebidas.push(bebida)
+
+        if (itensPedido.bebidas.some(itemBebida => itemBebida.bebidaId == bebida.bebidaId)) {
+          itensPedido.bebidas.map(itemBebida => {
+            if (itemBebida.bebidaId == bebida.bebidaId) {
+              itemBebida.qtd = parseInt(itemBebida.qtd) + parseInt(bebida.qtd)
+            }
+            return itemBebida
+          })
+        } else {
+          itensPedido.bebidas.push(bebida)
+        }
         localStorage.setItem('itensPedido', JSON.stringify(itensPedido))
         alert ('Bebida adicionada ao carrinho!')
+        this.$router.back()
+      } else {
+        alert('Não identificamos esse produto :/')
+      }
+      localStorage.setItem('itensPedido', JSON.stringify(itensPedido))
+    },
+
+    atualizarItem() {
+      this.validarItensPedido()
+      let itensPedido = localStorage.getItem('itensPedido')
+      itensPedido = JSON.parse(itensPedido)
+
+      if (this.$route.params.tipo_produto == 'pizza') {
+        const pizza = { pizzaId: this.produto.id, produto: this.produto, qtd: this.qtd }
+        itensPedido.pizzas.map(itemPizza => {
+          if (itemPizza.pizzaId == pizza.pizzaId) {
+            itemPizza.qtd = parseInt(pizza.qtd)
+          }
+          return itemPizza
+        })
+        localStorage.setItem('itensPedido', JSON.stringify(itensPedido))
+        alert('Pizza atualizada no carrinho!')
+        this.$router.back()
+      } else if (this.$route.params.tipo_produto == 'bebida') {
+        const bebida = { bebidaId: this.produto.id, produto: this.produto, qtd: this.qtd }
+        itensPedido.bebidas.map(itemBebida => {
+          if (itemBebida.bebidaId == bebida.bebidaId) {
+            itemBebida.qtd = parseInt(bebida.qtd)
+          }
+          return itemBebida
+        })
+        localStorage.setItem('itensPedido', JSON.stringify(itensPedido))
+        alert ('Bebida atualizada no carrinho!')
         this.$router.back()
       } else {
         alert('Não identificamos esse produto :/')

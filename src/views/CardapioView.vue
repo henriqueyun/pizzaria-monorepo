@@ -103,7 +103,7 @@ export default {
   data () {
     return {
       pizzas: [
-        { id: 1, sabor: 'Muçarela', ingredientes: 'Queijo muçarela, molho de tomates, tomates, azeitonas', preco: '42.00', imgURL: '/pizza1.png'}
+        { id: 1, nome: 'Muçarela', ingredientes: 'Queijo muçarela, molho de tomates, tomates, azeitonas', preco: '42.00', imgURL: '/pizza1.png'}
       ],
 
       bebidas: []
@@ -127,7 +127,7 @@ export default {
 
   methods: {
     async buscarPizzas() {
-      const pizzasResponse = await this.$axios.get(`${process.env.VUE_APP_MIDDLEWARE_API_URL}/api/v1/pizza/all`)
+      const pizzasResponse = await this.$axios.get(`${process.env.VUE_APP_API_URL}/api/v1/pizza/all`)
       this.pizzas = pizzasResponse.data
     },
 
@@ -168,12 +168,17 @@ export default {
 
 .img-wrapper {
   width: 128px;
+  height: 128px;
   background-color: gainsboro;
   border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .card-pizza img {
-  max-width: 128px;
+  width: 115px;
+  height: 115px;
   border-radius: 10px;
 }
 
