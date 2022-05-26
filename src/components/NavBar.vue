@@ -4,6 +4,8 @@
     <ul class="nav-menu">
       <router-link :to="{ name: 'controle-pedidos' }"><li>Controle de pedidos</li></router-link>
       <router-link to="/"><li>Pizzas</li></router-link>
+      <router-link to="/"><li>Controle de pedidos</li></router-link>
+      <router-link to="/listagem"><li>Pizzas</li></router-link>
       <router-link to="/"><li>Bebidas</li></router-link>
       <li v-if="jwt" class="btn-sair" @click="sair()">Sair</li>
     </ul>

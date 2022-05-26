@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 import ControlePedidos from '@/views/ControlePedidos'
 import LoginView from '@/views/LoginView'
 import AuthService from '@/services/AuthService'
+import ListagemProduto from '@/views/ListagemProduto'
 
 Vue.use(VueRouter)
 
@@ -20,6 +21,11 @@ const routes = [
     path: '/login',
     name: 'login',
     component: LoginView
+  },
+  {
+    path: '/listagem',
+    name: 'listagem-produto',
+    component: ListagemProduto
   }
 ]
 
