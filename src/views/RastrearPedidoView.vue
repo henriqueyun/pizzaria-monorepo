@@ -2,10 +2,11 @@
   <section>
     <header>
       <h1>Rastrear Meu Pedido</h1>
+      <p class="rastrear-subtitulo">Acompanhe o status de seu pedido informando o código dele aqui 😉📍🎯</p>
     </header>
     <main class="simple-container rastrear-pedido">
       <label for="nome">Código do pedido</label><br/>
-      <input v-model="idPedidoBuscado" type="number" min="0" placeholder="Digite ou o código do pedido"/><br/><br/>
+      <input v-model="idPedidoBuscado" type="number" min="1" placeholder="Digite o código do pedido"/><br/><br/>
       <span @click="buscarPedidoId(idPedidoBuscado)">Buscar pedido</span>
       <section v-if="pedido.encontrado" class="dados-pedido">
         <h4>Pedido Nº{{ pedido.id }}</h4>
@@ -19,8 +20,7 @@
             {{ itemBebida.qtd }}× Pizza {{ itemBebida.bebida.nome }}
           </p><br/>
         <b>Valor total:</b>
-        R$ {{ calcularValorPedido() }}
-      </section>
+        R$ {{ calcularValorPedido() }}</section>
       <section v-else-if="pedido.encontrado === false" class="dados-pedido">
         <h4>Não foi possível encontrar o pedido</h4>
         <p>Se houver algum problema, por favor entre em contato.</p>
@@ -89,5 +89,11 @@ export default {
     color: white;
     background-color: black;
     cursor: pointer;
+  }
+
+  .rastrear-subtitulo {
+    text-align: center;
+    color: lightgray;
+    padding: 1em;
   }
 </style>

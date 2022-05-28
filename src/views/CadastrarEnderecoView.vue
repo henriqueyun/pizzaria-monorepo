@@ -2,6 +2,7 @@
   <section>
     <header>
       <h1>Cadastrar endereço</h1>
+      <p class="endereco-subtitulo">Informe o endereço para entregarmos à foguete! 🚀🏍️</p>
     </header>
     <main class="simple-container cadastrar-endereco">
       <label for="nome">Nome:</label><br/>
@@ -78,5 +79,11 @@ export default {
       font-size: xxx-large;
       margin-top: 50px;
       text-align: center;
+  }
+
+  .endereco-subtitulo {
+    text-align: center;
+    color: lightgray;
+    padding: 1em;
   }
 </style>

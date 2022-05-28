@@ -4,7 +4,8 @@
       <h1>Carrinho</h1>
     </header>
     <main class="container" >
-      <div v-if="pedidoTemProdutos">  
+      <span v-if="pedidoTemProdutos" class="carrinho-subtitulo">Se o pedido estiver pronto, clique já em enviar pedido! Vai ter pizza quentinha por aí já já! 🛵🍕</span>
+      <div v-if="pedidoTemProdutos">
         <div
           v-for="itemPizza in pedido.itensPedido.pizzas"
           v-bind:key="itemPizza.id"
@@ -32,7 +33,7 @@
           <p>Valor: R$ {{ itemBebida.qtd * itemBebida.produto.preco}}</p>
         </div>
       </div>
-      <span class="carrinho-vazio" v-else>Dê uma olhada no nosso cardápio e coloca algo aqui! 🍕</span>
+      <span class="carrinho-subtitulo" v-else>Dê uma olhada no nosso cardápio e coloca algo aqui! 🍕</span>
       <h2>
         Valor total: R$
         {{ valorTotal }}
@@ -47,7 +48,7 @@
       <textarea v-model="pedido.observacao" placeholder="Adicione alguma observação, deseja retirar as azeitonas? Calabresa sem cebola? Sem frescura, a gente faz pra ti 😃">
       </textarea><br/>
       <span>
-        <span class="btn-realizar-pedido" @click="realizarPedido()">Realizar pedido</span>
+        <span class="btn-realizar-pedido" @click="realizarPedido()">Enviar pedido</span>
       </span>
     </main>
   </section>
@@ -218,7 +219,7 @@ textarea {
   resize: none;
 }
 
-.carrinho-vazio {
+.carrinho-subtitulo {
   text-align: center;
   color: lightgray;
   padding: 1em;

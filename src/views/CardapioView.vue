@@ -3,63 +3,9 @@
     <header>
       <h1>Cardárpio</h1>
       <h2 v-if="temPizzas">Pizzas</h2>
+      <p class="cardapio-subtitulo">Aprecie nosso cardápio e tenha a mais <i>quente</i> e fina massa além dos melhores aromas no conforto de casa! 😋🍕</p>
     </header>
     <main class="container">
-      <!-- <div class="card-pizza">
-          <span>
-            <img src="../assets/pizza1.png" alt="" srcset="../assets/pizza1.png">
-          </span>
-          <span class="card-pizza-text">
-            <h2>Pizza de pipipi</h2>
-            <p>Queijo, muçarela, tomate, muçarela, tomate, muçarela, tomate etc.</p>
-          </span>
-          <span class="card-pizza-action">
-            <h2>R$ 40.00</h2>
-            <router-link to="/adicionar_pizza/teste"><span>Pedir agora!</span></router-link>
-          </span>
-        </div>  
-      
-      <div class="card-pizza">
-        <span>
-          <img src="../assets/pizza2.png" alt="" srcset="../assets/pizza2.png">
-        </span>
-        <span class="card-pizza-text">
-          <h2>Pizza de pipipi</h2>
-          <p>Queijo, muçarela, tomate, muçarela, tomate, muçarela, tomate etc.</p>
-        </span>
-        <span class="card-pizza-action">
-          <h2>R$ 40.00</h2>
-          <router-link to="/adicionar_pizza/teste"><span>Pedir agora!</span></router-link>
-        </span>
-      </div>  
-
-      <div class="card-pizza">
-        <span>
-          <img src="../assets/pizza3.png" alt="" srcset="../assets/pizza3.png">
-        </span>
-        <span class="card-pizza-text">
-          <h2>Pizza de jijiji</h2>
-          <p>Queijo, muçarela, tomate, muçarela, tomate, muçarela, tomate etc.</p>
-        </span>
-        <span class="card-pizza-action">
-          <h2>R$ 35.00</h2>
-          <router-link to="/adicionar_pizza/teste"><span>Pedir agora!</span></router-link>
-        </span>
-      </div>
-      
-      <div class="card-pizza">
-        <span>
-          <img src="../assets/pizza4.png" alt="" srcset="../assets/pizza4.png">
-        </span>
-        <span class="card-pizza-text">
-          <h2>Pizza de pirulito pão doce</h2>
-          <p>Queijo, muçarela, tomate, muçarela, tomate, muçarela, tomate etc.</p>
-        </span>
-        <span class="card-pizza-action">
-          <h2>R$ 31.00</h2>
-          <router-link to="/adicionar_pizza/teste"><span>Pedir agora!</span></router-link>
-        </span>
-      </div> -->
       <div v-for="pizza in pizzas" v-bind:key="pizza.id" class="card-pizza">
         <span class="img-wrapper">
           <img :src="pizza.imgURL" alt="" :srcset="pizza.imgURL"  >
@@ -76,6 +22,7 @@
     </main>
     <header v-if="temBebidas">
       <h2>Bebidas</h2>
+      <p class="cardapio-subtitulo">Uma boa massa é ainda melhor acompanhada de uma boa bebida! 🥤🍻🍷🥃</p>
     </header>
     <main class="container">
       <div v-for="bebida in bebidas" v-bind:key="bebida.id" class="card-pizza">
@@ -213,5 +160,11 @@ header h2 {
   left: 0;
   height: 100%;
   width: 100%;
+}
+
+.cardapio-subtitulo {
+  text-align: center;
+  color: lightgray;
+  padding: 1em;
 }
 </style>
