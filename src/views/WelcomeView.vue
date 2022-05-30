@@ -7,6 +7,8 @@
       <p v-else>Informe o seu endereço, cheque o cardápio e faça já o seu pedido!</p>
     </span>
     <img src="../assets/bg.png"/>
+    <p>A melhor escolha para todos os cenários seja <b> um pedaço para cada amigo</b>, <b>uma meio-a-meio para com o seu par</b> ou <b>oito pedaços só pra sí mesmo</b>.</p>
+    <i>Pizzas são a melhor pedida.</i>
   </div>
 </template>
 
@@ -41,7 +43,6 @@ export default {
   }
   .title-wrapper{
     margin-top: 8em;
-    margin-bottom: 4em;
   }
 
   h1, p {
@@ -52,5 +53,11 @@ export default {
     align-self: center;
     max-width: 100%;
     border: dashed 3px black;
+    margin: 5em;
+  }
+
+  i {
+    margin-top: 0.5em;
+    font-size: large;
   }
 </style>

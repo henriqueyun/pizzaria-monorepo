@@ -1,9 +1,9 @@
 <template>
-  <section>
+  <section style="min-height: 75vh;">
     <header>
       <h1>Carrinho</h1>
     </header>
-    <main class="container" >
+    <main class="container" style="margin-bottom: 1em;">
       <span v-if="pedidoTemProdutos" class="carrinho-subtitulo">Se o pedido estiver pronto, clique já em enviar pedido! Vai ter pizza quentinha por aí já já! 🛵🍕</span>
       <div v-if="pedidoTemProdutos">
         <div

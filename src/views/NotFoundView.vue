@@ -1,5 +1,5 @@
 <template>
-  <div class="about">
+  <div class="about" style="min-height: 75vh;">
     <h1>Foi mal, mas não encontrei essa página =/</h1><br/>
     <span @click="voltarPagina()">Voltar para página anterior</span>
   </div>
@@ -16,10 +16,8 @@ export default {
 <style scoped>
   .about {
     width: 100%;
-    height: 100%;
     display: flex;
     flex-flow: column wrap;
-    position: absolute;
     align-items: center;
     justify-content: center;
   }

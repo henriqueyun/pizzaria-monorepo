@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section style="min-height: 75vh;">
     <header>
       <h1>Rastrear Meu Pedido</h1>
       <p class="rastrear-subtitulo">Acompanhe o status de seu pedido informando o código dele aqui 😉📍🎯</p>

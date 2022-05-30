@@ -1,5 +1,5 @@
 <template>
-  <section class="visualizacao-produto">
+  <section class="visualizacao-produto" style="min-height: 75vh;">
     <header>
       <h1>{{ obterPalavraComPrimeiraLetraMaiuscula(action) }} {{ obterPalavraComPrimeiraLetraMaiuscula(tipoProduto) }}</h1>
     </header>

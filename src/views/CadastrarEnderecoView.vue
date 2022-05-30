@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section style="min-height: 75vh;">
     <header>
       <h1>Cadastrar endereço</h1>
       <p class="endereco-subtitulo">Informe o endereço para entregarmos à foguete! 🚀🏍️</p>
