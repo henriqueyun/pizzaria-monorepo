@@ -39,10 +39,10 @@ export default {
   .container {
     display: flex;
     justify-content: center;
-    padding-bottom: 4em;
+    padding-bottom: 3em;
   }
   .title-wrapper{
-    margin-top: 8em;
+    margin-top: 6em;
   }
 
   h1, p {
@@ -59,5 +59,17 @@ export default {
   i {
     margin-top: 0.5em;
     font-size: large;
+  }
+  
+  @media (max-width: 600px) {
+    .container {
+      width: 90%;
+    }
+    .title-wrapper{
+      margin-top: 2em;
+    }
+    img {
+      margin: 3em;
+    }
   }
 </style>

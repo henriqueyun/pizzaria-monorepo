@@ -224,4 +224,10 @@ textarea {
   color: lightgray;
   padding: 1em;
 }
+
+@media (max-width: 600px) {
+  .container {
+    width: 90%;
+  }
+}
 </style>

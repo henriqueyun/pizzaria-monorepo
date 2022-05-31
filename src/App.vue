@@ -46,4 +46,11 @@ a {
   text-decoration: none;
 }
 
+@media (max-width: 600px) {
+  .simple-container {
+    width: 90%;
+    margin-bottom: 3em;
+    /* background-color: darkorchid; */
+  }
+}
 </style>

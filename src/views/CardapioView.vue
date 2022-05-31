@@ -167,4 +167,39 @@ header h2 {
   color: lightgray;
   padding: 1em;
 }
+
+
+@media (max-width: 600px) {
+  .container {
+    justify-content: center;
+  }
+
+  .img-wrapper {
+    justify-content: center;
+  }
+
+  .card-pizza { 
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    align-items: center;
+  }
+
+  .card-pizza-action {
+    padding: 0.5em;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .card-pizza-action a {
+    margin: 0.5em;
+  }
+  .card-pizza { 
+    min-height: 50px;
+    min-width: 50px;
+  }
+  .card-pizza-text {
+    text-align: center;
+  }
+}
 </style>
