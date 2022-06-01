@@ -4,7 +4,8 @@ import VueRouter from 'vue-router'
 import ControlePedidos from '@/views/ControlePedidos'
 import LoginView from '@/views/LoginView'
 import AuthService from '@/services/AuthService'
-import ListagemProduto from '@/views/ListagemProduto'
+import ListagemPizza from '@/views/ListagemPizza'
+import ListagemBebida from '@/views/ListagemBebida'
 
 Vue.use(VueRouter)
 
@@ -23,9 +24,14 @@ const routes = [
     component: LoginView
   },
   {
-    path: '/listagem',
-    name: 'listagem-produto',
-    component: ListagemProduto
+    path: '/pizzas',
+    name: 'listagem-pizzas',
+    component: ListagemPizza
+  },
+  {
+    path: '/bebidas',
+    name: 'listagem-bebidas',
+    component: ListagemBebida
   }
 ]
 
