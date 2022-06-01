@@ -87,20 +87,25 @@ export default {
 
   methods: {
     async realizarPedido() {
-      const { data } = await PedidoService.post(this.pedido)
-      this.pedido.id = data.id
-      alert(`O seu pedido foi enviado =)\nAcompanhe pelo rastreio utilizando o código do pedido: ${this.pedido.id}`)
-      let historicoPedidos = localStorage.getItem('historicoPedidos') || '[]'
-      historicoPedidos = JSON.parse(historicoPedidos)
-      if (historicoPedidos) {
-        historicoPedidos.push(this.pedido)
-        localStorage.setItem('historicoPedidos', JSON.stringify(historicoPedidos))
+      const camposInvalidos = this.getCamposInvalidos()
+      if (!camposInvalidos) {
+        const { data } = await PedidoService.post(this.pedido)
+        this.pedido.id = data.id
+        alert(`O seu pedido foi enviado =)\nAcompanhe pelo rastreio utilizando o código do pedido: ${this.pedido.id}`)
+        let historicoPedidos = localStorage.getItem('historicoPedidos') || '[]'
+        historicoPedidos = JSON.parse(historicoPedidos)
+        if (historicoPedidos) {
+          historicoPedidos.push(this.pedido)
+          localStorage.setItem('historicoPedidos', JSON.stringify(historicoPedidos))
+        } else {
+          historicoPedidos = []
+          historicoPedidos.push(this.pedido)
+          localStorage.setItem('historicoPedidos', JSON.stringify(historicoPedidos))
+        }
+        this.limpaPedidoAtual()
       } else {
-        historicoPedidos = []
-        historicoPedidos.push(this.pedido)
-        localStorage.setItem('historicoPedidos', JSON.stringify(historicoPedidos))
+        alert(camposInvalidos)
       }
-      this.limpaPedidoAtual()
     },
 
     limpaPedidoAtual () {
@@ -161,6 +166,40 @@ export default {
       itensPedido.bebidas = itensPedido.bebidas.filter(itemBebida => itemBebida.bebidaId !== bebidaId)
       localStorage.setItem('itensPedido', JSON.stringify(itensPedido))
       this.montarPedido()
+    },
+
+    getCamposInvalidos () {
+      let camposInvalidos = ''
+      let dadosClienteInvalidos = false
+
+      if (!this.pedido.nomeCliente) {
+        camposInvalidos += '\nNome do cliente'
+        dadosClienteInvalidos = true
+      }
+      if (!this.pedido.enderecoCliente) {
+        camposInvalidos += '\nEndereço do cliente'
+        dadosClienteInvalidos = true
+      }
+      if (!this.pedido.telefoneCliente) {
+        camposInvalidos += '\nTelefone do cliente'
+        dadosClienteInvalidos = true
+      }
+
+      if (camposInvalidos) {
+        console.log(camposInvalidos)
+        camposInvalidos = 'Opa, parece que há dados do cliente não preenchidos 🤔:\n' + camposInvalidos
+        if (dadosClienteInvalidos) {
+          camposInvalidos += '\n\nPor favor, vá para a página de Cadastrar Endereço e preencha antes de realizar o pedido'
+          return camposInvalidos
+        }
+      }
+      const itens = JSON.parse(localStorage.getItem('itensPedido'))
+      const itensPedido = [...itens.pizzas,...itens.bebidas]
+      console.log(itensPedido)
+      if (!itensPedido.length) {
+        alert('É necessário adicionar ao menos uma pizza ou bebida para enviar o pedido 😕😳')
+        return
+      }
     }
   }
 };

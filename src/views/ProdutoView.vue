@@ -9,7 +9,7 @@
       <label for="precoProduto">Preço:</label><br/>
       <input type="text" disabled name="precoProduto" :value="produto.preco" placeholder="Carregando informações..."/>
       <label for="qtd">Quantidade:</label><br/>
-      <input v-model="qtd" type="number" name="qtd" min="1" max="99" value="1"/><br/>
+      <input v-model="qtd" type="number" name="qtd" min="1" max="10" value="1"/><br/>
       <span v-if="action == 'adicionar'" @click="adicionarItem()">Concluir</span>
       <span v-else @click="atualizarItem()">Salvar</span>
     </main>
@@ -95,6 +95,21 @@ export default {
     },
 
     adicionarItem() {
+      this.qtd = parseInt(this.qtd)
+      if (this.qtd > 50) {
+        if (this.tipoProduto === 'pizza') {
+          alert(`Os fornos da Projeto Pizzaria não negam fogo, adicionamos ${this.qtd} ${this.tipoProduto}s ao carrinho`)
+        } else {
+          alert(`Os fornos da Projeto Pizzaria não negam fogo, adicionamos ${this.qtd} ${this.tipoProduto}s ao carrinho`)
+        }
+      }
+
+      if (!this.qtd || this.qtd < 0) {
+        alert(`Ops, precisamos que informe uma quantidade de ${this.tipoProduto}s válida`)
+        this.qtd = 1
+        return 
+      }
+
       this.validarItensPedido()
       let itensPedido = localStorage.getItem('itensPedido')
       itensPedido = JSON.parse(itensPedido)

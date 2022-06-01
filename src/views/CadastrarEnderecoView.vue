@@ -9,12 +9,12 @@
       <input v-model="cliente.nome" type="nome" placeholder="ex.: José da Silva"/><br/><br/>
 
       <label for="telefone">Telefone:</label><br/>
-      <input v-model="cliente.telefone" type="phone" placeholder="ex.: (11) 91234-5678"><br/><br/>
+      <input v-model="cliente.telefone" v-mask="'(##) ?#####-####'" type="phone" placeholder="ex.: (11) 91234-5678"><br/><br/>
 
       <label for="endereco">Endereço:</label><br/>
       <input v-model="cliente.endereco" name="endereco" type="text" placeholder="ex.: R. de exemplo, nº 123"/><br/><br/>
 
-      <span @click="cadastrarDadosCliente">Salvar</span>
+      <span class="btn-salvar" @click="cadastrarDadosCliente">Salvar</span>
     </main>
   </section>
 </template>
@@ -32,11 +32,16 @@ export default {
   },
   methods : {
     cadastrarDadosCliente () {
-      localStorage.setItem('nomeCliente', this.cliente.nome)
-      localStorage.setItem('telefoneCliente', this.cliente.telefone)
-      localStorage.setItem('enderecoCliente', this.cliente.endereco)
-      alert('Seus dados foram salvos!')
-      this.$router.back()
+      const errosValidacao = this.validarDadosCliente()
+      if (!errosValidacao) {
+        localStorage.setItem('nomeCliente', this.cliente.nome)
+        localStorage.setItem('telefoneCliente', this.cliente.telefone)
+        localStorage.setItem('enderecoCliente', this.cliente.endereco)
+        alert('Seus dados foram salvos!')
+        this.$router.back()
+      } else {
+        alert('Ops, há problemas nos campos:\n' + errosValidacao)
+      }
       
     },
 
@@ -44,6 +49,24 @@ export default {
       this.cliente.nome = localStorage.getItem('nomeCliente')
       this.cliente.telefone = localStorage.getItem('telefoneCliente')
       this.cliente.endereco = localStorage.getItem('enderecoCliente')
+    },
+
+    validarDadosCliente () {
+      let errosValidacao = ''
+      if (!this.cliente.nome || this.cliente.nome.length <= 3) {
+        errosValidacao += '\nNome'
+      } 
+
+      const TELEFONE_PATTERN = /^\([1-9]{2}\) (?:[2-8]|9[1-9])[0-9]{3}-[0-9]{4}$/
+      console.log(this.cliente.telefone)
+      if (!TELEFONE_PATTERN.test(this.cliente.telefone)) {
+        errosValidacao += '\nTelefone, o formato deve ser (XX) XXXX-XXXX'
+      }
+
+      if (!this.cliente.endereco && this.cliente.endereco.length > 4) {
+        errosValidacao += '\nEndereço'
+      }
+      return errosValidacao
     }
   },
 
@@ -85,5 +108,9 @@ export default {
     text-align: center;
     color: lightgray;
     padding: 1em;
+  }
+
+  .btn-salvar {
+    margin-bottom: 2em;
   }
 </style>

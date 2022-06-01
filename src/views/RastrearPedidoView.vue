@@ -22,7 +22,7 @@
         <b>Valor total:</b>
         R$ {{ calcularValorPedido() }}</section>
       <section v-else-if="pedido.encontrado === false" class="dados-pedido">
-        <h4>Não foi possível encontrar o pedido</h4>
+        <h4>Desculpe, não foi possível encontrar o pedido {{idPedidoBuscado}} ❌🔎</h4>
         <p>Se houver algum problema, por favor entre em contato.</p>
       </section>
     </main>
@@ -48,12 +48,14 @@ export default {
 
   methods: {
     async buscarPedidoId (id) {
+      if (!id) {
+        alert('Ops, parece que você não inseriu o código do pedido 🤔\n\nPreencha o campo e tente novamente.')
+      }
       try {
         this.pedido = await PedidoService.get(id)
         this.pedido.encontrado = true
       } catch (err) {
         this.pedido.encontrado = false
-        this.pedido.id = 'Não foi possível encontrar o pedido'
       }
     },
     

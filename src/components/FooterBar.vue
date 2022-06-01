@@ -49,6 +49,8 @@ export default {
   color: white;
   padding: 2em 0;
   align-self: flex-end;
+  display: flex;
+  justify-content: center;
 }
 
 .footer-menu {
@@ -67,8 +69,12 @@ a {
 .social-media-icon {
   margin: 0.5em;
 }
+.footer-item-title {
+    margin: 0 1em;
+}
 
 .footer-item-title p {
+
   margin-bottom: 1em;
 }
 
