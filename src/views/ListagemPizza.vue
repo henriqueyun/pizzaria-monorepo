@@ -22,19 +22,19 @@
         <h2 style="margin: 15px">Adicionar Pizza</h2>
         <span class='nome'>Imagem da Pizza</span>
         <label for="arquivo">
-          <img class="up-img" src="../assets/up-image.png" width="80px">
+          <img class="up-img" :src="pizza.imgURL" width="80px">
         </label>
-        <input type="file" name="arquivo" id="arquivo">
+        <input type="file" name="arquivo" id="arquivo" @change="loadImageAsBase64">
         <span class='nome'>Nome da Pizza</span>
-        <input class='text-box' name='nome produto'>
+        <input v-model="pizza.nome" class='text-box' name='nome produto'>
         <span class='nome'>Ingredientes</span>
         <label for="ingredientes">
-          <textarea class="text-area" rows="4"></textarea>
+          <textarea v-model="pizza.ingredientes" class="text-area" rows="4"></textarea>
         </label>
         <input class='text-box' name='ingredientes' style="display: none;">
-        <span class='nome'>Preço</span>
-        <input class='text-box' name='preco'>
-        <button class= "salvar">Salvar</button>
+        <span  class='nome'>Preço</span>
+        <input v-model="pizza.preco" class='text-box' name='preco'>
+        <button class= "salvar" @click="adicionarPizza()" >Salvar</button>
         <button class= "adicionar" @click="hide" style= "position:relative; left: 430px; top: 30px;">Cancelar</button>
       </div>
     </modal>
@@ -67,7 +67,19 @@
 </template>
 
 <script>
+import PizzaService from "../services/PizzaService"
 export default {
+  data(){
+    return{
+      pizza:{
+        nome: "",
+        ingredientes: "",
+        preco: 0,
+        imagem: "",
+        imgURL:"/up-image.png"
+      }
+    }
+  },
   name: "App",
   methods: {
     show() {
@@ -81,6 +93,24 @@ export default {
     },
     hide1() {
       this.$modal.hide("alterar");
+    },
+    adicionarPizza(){
+        PizzaService.adicionarPizza(this.pizza)
+    },
+    async loadImageAsBase64(e) {
+      console.log("Imagem carregada")
+      const file = e.target.files[0]
+      this.pizza.imgURL = URL.createObjectURL(file)
+      const fileBase64 = await this.toBase64(file)
+      this.imagem = fileBase64
+    },
+   toBase64(file) {
+     return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
     }
   }
 };
