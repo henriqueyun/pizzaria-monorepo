@@ -2,22 +2,26 @@
   <div class="container">
     <h1>Pizzas</h1>
     <div>
-      <button class= "adicionar" @click="show">Adicionar</button>
+      <button class= "adicionar" @click="showAdicionar">Adicionar</button>
     </div>
     <br>
-    <div class="item-produto">
-      <div style="display: flex; align-items: center;">
-        <img src="../assets/pizza1.png" width="80px">
-        <span class="dado-produto">Calabresa</span>
-        <span class="ingredientes-produto">Molho de tomate, Calabresa, Cebola, Orégano e Azeitonas</span>
-        <span class="preco">Preço</span>
+    <template v-if="pizzas.length">
+      <div class="item-produto" v-for="iPizza in pizzas" v-bind:key="iPizza.id">
+        <div class="dados-produto">
+          <img :src="iPizza.imgURL" class="pizzaImg">
+          <span class="label-destaque">{{ iPizza.nome}}</span>
+          <span class="ingredientes-produto"><strong>Ingredientes:</strong> {{ iPizza.ingredientes }}</span>
+        </div>
+        <div class="box-botoes-item-produto">
+          <span class="label-destaque">R$ {{ iPizza.preco }}</span>
+          <button class="btn-action" @click="show1">Alterar</button>
+          <button class="btn-action">Excluir</button>
+        </div>
       </div>
-      <button class="excluir" @click="show1">Alterar</button>
-      <button class="excluir">Excluir</button>
-    </div>
+    </template>
 
 
-    <modal name="adicionar" :clickToClose="false" :height="auto" :minHeight="490" :adaptive="true" :scrollable="true" :focusTrap="true" >
+    <modal name="adicionar" :clickToClose="false" :height="'auto'" :minHeight="600" :adaptive="true" :scrollable="true" :focusTrap="true" >
       <div>
         <h2 style="margin: 15px">Adicionar Pizza</h2>
         <span class='nome'>Imagem da Pizza</span>
@@ -34,13 +38,13 @@
         <input class='text-box' name='ingredientes' style="display: none;">
         <span  class='nome'>Preço</span>
         <input v-model="pizza.preco" class='text-box' name='preco'>
-        <button class= "salvar" @click="adicionarPizza()" >Salvar</button>
-        <button class= "adicionar" @click="hide" style= "position:relative; left: 430px; top: 30px;">Cancelar</button>
+        <button class="btn-modal" @click="adicionarPizza()" >Salvar</button>
+        <button class="btn-modal" @click="hideAdicionar()">Cancelar</button>
       </div>
     </modal>
+<!-- 
 
-
-    <modal name="alterar" :clickToClose="false" :height="auto" :minHeight="490" :adaptive="true" :scrollable="true" :focusTrap="true" >
+    <modal name="alterar" :clickToClose="false" height="auto" :minHeight="490" :adaptive="true" :scrollable="true" :focusTrap="true" >
       <div>
         <h2 style="margin: 15px">Editar Pizza</h2>
         <span class='nome'>Imagem da Pizza</span>
@@ -60,7 +64,7 @@
         <button class= "salvar">Salvar</button>
         <button class= "adicionar" @click="hide1" style= "position:relative; left: 430px; top: 30px;">Cancelar</button>
       </div>
-    </modal>
+    </modal> -->
 
     
   </div>
@@ -69,24 +73,35 @@
 <script>
 import PizzaService from "../services/PizzaService"
 export default {
-  data(){
-    return{
-      pizza:{
+  data() {
+    return {
+      pizza: {
         nome: "",
         ingredientes: "",
         preco: 0,
         imagem: "",
-        imgURL:"/up-image.png"
-      }
+        imgURL: "/up-image.png"
+      },
+      pizzas: []
     }
+  },
+  mounted () {
+    this.buscarPizzas()
   },
   name: "App",
   methods: {
-    show() {
+    showAdicionar() {
       this.$modal.show("adicionar");
     },
-    hide() {
+    hideAdicionar() {
       this.$modal.hide("adicionar");
+    },
+    limparAdicionar() {
+      this.nome = "",
+      this.ingredientes = "",
+      this.preco = 0,
+      this.imagem = "",
+      this.imgURL = "/up-image.png"
     },
     show1() {
       this.$modal.show("alterar");
@@ -94,8 +109,9 @@ export default {
     hide1() {
       this.$modal.hide("alterar");
     },
-    adicionarPizza(){
-        PizzaService.adicionarPizza(this.pizza)
+    async adicionarPizza() {
+      await PizzaService.adicionarPizza(this.pizza)
+
     },
     async loadImageAsBase64(e) {
       console.log("Imagem carregada")
@@ -104,54 +120,62 @@ export default {
       const fileBase64 = await this.toBase64(file)
       this.imagem = fileBase64
     },
-   toBase64(file) {
-     return new Promise((resolve, reject) => {
+    toBase64(file) {
+      return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => resolve(reader.result);
         reader.onerror = error => reject(error);
       });
+    },
+    async buscarPizzas() {
+      this.pizzas = await PizzaService.buscarPizzas()
     }
   }
 };
 </script>
 
-<style>
+<style scoped>
   .container {
     width: 60%;
     margin: 1em auto;
     display: flex;
     flex-flow: column wrap;
-    
-    /* background-color: green; */
   }
 
   .item-produto {
-    background-color: #EBE5E5;
     display: flex;
     align-items: center;
-    font-size: 2em;
+    margin-bottom: 1em;
     justify-content: space-between;
+    padding: 0.5em;
+    background-color: white;
     box-shadow: 5px 5px 20px grey;
     border-radius: 8px;
   }
+
+  .dados-produto {
+    display: flex;
+    align-items: center;
+    max-width: 60%;
+  }
+  .label-destaque {
+    font-size: 1.5em;
+  }
   
-  .dado-produto{
-    margin: 0 1em;
+  .box-botoes-item-produto {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.4em;
+    padding: 0.4em;
   }
 
   .ingredientes-produto{
+    font-size: 1em;
     margin: 0 1em;
-    font-size: 0.5em;
-    padding-right: 100px;
   }
 
-  .preco{
-    margin: 0 1em;
-    font-size: 0.8em;
-  }
-
-  .excluir{
+  .btn-action{
     background-color: #000000;
     border: none;
     color: white;
@@ -160,36 +184,50 @@ export default {
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin: 4px 15px;
     cursor: pointer;
     border-radius: 8px;
     transition-duration: 0.4s
   }
-  .excluir:hover{
-  background: #CECECE;
-  color: #000000;
-}
-.excluir:active{
-  background: red;
-  color: #000000;
-  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
-  
-}
+  .btn-action:hover{
+    background: #CECECE;
+    color: #000000;
+  }
+  .btn-action:active{
+    background: red;
+    color: #000000;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    
+  }
 
-.adicionar{
+  .btn-modal{
     background-color: #000000;
     border: none;
     color: white;
-    padding: 10px 10px;
+    padding: 15px 32px;
     text-align: center;
     text-decoration: none;
-    display: inline-block;
     font-size: 16px;
-    margin: 4px;
     cursor: pointer;
     border-radius: 8px;
-    transition: 0.4s
-}
+    transition-duration: 0.4s;
+    margin: 0.5em;
+    float: right;
+  }
+
+  .adicionar{
+      background-color: #000000;
+      border: none;
+      color: white;
+      padding: 10px 10px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: 0.4s
+  }
 
 .adicionar:hover{
   background: #CECECE;
@@ -267,5 +305,13 @@ input[type="file"] {
 
 .up-img:hover{
   filter:brightness(90%);
+}
+
+.pizzaImg {
+  margin: 0.8em;
+  width: 80px;
+  height: 80px;
+  min-width: 80px;
+  min-height: 80px;
 }
 </style>

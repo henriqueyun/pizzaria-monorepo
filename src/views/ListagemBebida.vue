@@ -16,7 +16,7 @@
     </div>
 
 
-    <modal name="adicionar" :clickToClose="false" :height="auto" :minHeight="490" :adaptive="true" :scrollable="true" :focusTrap="true" >
+    <modal name="adicionar-bebida" :clickToClose="false" :height="auto" :minHeight="490" :adaptive="true" :scrollable="true" :focusTrap="true" >
       <div>
         <h2 style="margin: 15px">Adicionar Pizza</h2>
         <span class='nome'>Imagem da Pizza</span>
@@ -35,7 +35,7 @@
     </modal>
 
 
-    <modal name="alterar" :clickToClose="false" :height="auto" :minHeight="490" :adaptive="true" :scrollable="true" :focusTrap="true" >
+    <modal name="alterar-bebida" :clickToClose="false" :height="auto" :minHeight="490" :adaptive="true" :scrollable="true" :focusTrap="true" >
       <div>
         <h2 style="margin: 15px">Editar Pizza</h2>
         <span class='nome'>Imagem da Pizza</span>
@@ -81,7 +81,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
   .container {
     width: 60%;
     margin: 1em auto;
