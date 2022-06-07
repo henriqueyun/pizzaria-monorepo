@@ -16,14 +16,14 @@
     </div>
 
 
-    <modal name="adicionar" :clickToClose="false" :height="auto" :minHeight="490" :adaptive="true" :scrollable="true" :focusTrap="true" >
+    <modal name="adicionar-bebida" :clickToClose="false" :height="auto" :minHeight="490" :adaptive="true" :scrollable="true" :focusTrap="true" >
       <div>
         <h2 style="margin: 15px">Adicionar Pizza</h2>
         <span class='nome'>Imagem da Pizza</span>
         <label for="arquivo">
           <img class="up-img" src="../assets/up-image.png" width="80px">
         </label>
-        <input type="file" name="arquivo" id="arquivo">
+        <input type="file" name="arquivo-bebida" id="arquivo-bebida">
         <span class='nome'>Nome da Pizza</span>
         <input class='text-box' name='nome produto'>
         <span class='nome'>Ingredientes</span>
@@ -35,7 +35,7 @@
     </modal>
 
 
-    <modal name="alterar" :clickToClose="false" :height="auto" :minHeight="490" :adaptive="true" :scrollable="true" :focusTrap="true" >
+    <modal name="alterar-bebida" :clickToClose="false" :height="auto" :minHeight="490" :adaptive="true" :scrollable="true" :focusTrap="true" >
       <div>
         <h2 style="margin: 15px">Editar Pizza</h2>
         <span class='nome'>Imagem da Pizza</span>
@@ -81,7 +81,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
   .container {
     width: 60%;
     margin: 1em auto;
