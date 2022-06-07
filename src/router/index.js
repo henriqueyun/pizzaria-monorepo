@@ -26,12 +26,18 @@ const routes = [
   {
     path: '/pizzas',
     name: 'listagem-pizzas',
-    component: ListagemPizza
+    component: ListagemPizza,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/bebidas',
     name: 'listagem-bebidas',
-    component: ListagemBebida
+    component: ListagemBebida,
+    meta: {
+      requiresAuth: true
+    }
   }
 ]
 
@@ -43,7 +49,7 @@ router.beforeEach(async (to, from, next) => {
   if (to.meta.requiresAuth) {
     const token = localStorage.getItem('jwt')
     if (token) {
-      
+
       const isUserAuthorized = await AuthService.authorize(token)
 
       if (!isUserAuthorized) {

@@ -14,14 +14,13 @@
         </div>
         <div class="box-botoes-item-produto">
           <span class="label-destaque">R$ {{ iPizza.preco }}</span>
-          <button class="btn-action" @click="show1">Alterar</button>
-          <button class="btn-action">Excluir</button>
+          <button class="btn-action" @click="showAlterar(iPizza)">Alterar</button>
+          <button @click="removerPizza(iPizza.id)" class="btn-action">Excluir</button>
         </div>
       </div>
     </template>
 
-
-    <modal name="adicionar" :clickToClose="false" :height="'auto'" :minHeight="600" :adaptive="true" :scrollable="true" :focusTrap="true" >
+    <modal name="adicionar" :clickToClose="true" :height="'auto'" :minHeight="600" :adaptive="true" :scrollable="true" :focusTrap="true" >
       <div>
         <h2 style="margin: 15px">Adicionar Pizza</h2>
         <span class='nome'>Imagem da Pizza</span>
@@ -42,31 +41,29 @@
         <button class="btn-modal" @click="hideAdicionar()">Cancelar</button>
       </div>
     </modal>
-<!-- 
-
-    <modal name="alterar" :clickToClose="false" height="auto" :minHeight="490" :adaptive="true" :scrollable="true" :focusTrap="true" >
+  
+    <modal name="alterar" :clickToClose="true" :height="'auto'" :minHeight="600" :adaptive="true" :scrollable="true" :focusTrap="true" >
       <div>
-        <h2 style="margin: 15px">Editar Pizza</h2>
+        <h2 style="margin: 15px">Adicionar Pizza</h2>
         <span class='nome'>Imagem da Pizza</span>
         <label for="arquivo">
-          <img class="up-img" src="../assets/pizza1.png" width="80px">
+          <img class="up-img" :src="pizzaAlterada.imgURL" width="80px">
         </label>
-        <input type="file" name="arquivo" id="arquivo">
+        <input type="file" name="arquivo" id="arquivo" @change="loadImageAsBase64">
         <span class='nome'>Nome da Pizza</span>
-        <input class='text-box' name='nome produto'>
+        <input v-model="pizzaAlterada.nome" class='text-box' name='nome produto'>
         <span class='nome'>Ingredientes</span>
         <label for="ingredientes">
-          <textarea class="text-area" rows="4"></textarea>
+          <textarea v-model="pizzaAlterada.ingredientes" class="text-area" rows="4"></textarea>
         </label>
         <input class='text-box' name='ingredientes' style="display: none;">
-        <span class='nome'>Preço</span>
-        <input class='text-box' name='preco'>
-        <button class= "salvar">Salvar</button>
-        <button class= "adicionar" @click="hide1" style= "position:relative; left: 430px; top: 30px;">Cancelar</button>
+        <span  class='nome'>Preço</span>
+        <input v-model="pizzaAlterada.preco" class='text-box' name='preco'>
+        <button class="btn-modal" @click="alterarPizza()">Alterar</button>
+        <button class="btn-modal" @click="hideAlterar()">Cancelar</button>
       </div>
-    </modal> -->
-
-    
+    </modal>
+ 
   </div>
 </template>
 
@@ -79,13 +76,18 @@ export default {
         nome: "",
         ingredientes: "",
         preco: 0,
-        imagem: "",
+        imgURL: "/up-image.png"
+      },
+      pizzaAlterada: {
+        nome: "",
+        ingredientes: "",
+        preco: 0,
         imgURL: "/up-image.png"
       },
       pizzas: []
     }
   },
-  mounted () {
+  mounted() {
     this.buscarPizzas()
   },
   name: "App",
@@ -96,41 +98,65 @@ export default {
     hideAdicionar() {
       this.$modal.hide("adicionar");
     },
-    limparAdicionar() {
-      this.nome = "",
-      this.ingredientes = "",
-      this.preco = 0,
-      this.imagem = "",
-      this.imgURL = "/up-image.png"
-    },
-    show1() {
+    showAlterar(pizza) {
+      this.pizzaAlterada = pizza
       this.$modal.show("alterar");
     },
-    hide1() {
+    hideAlterar() {
       this.$modal.hide("alterar");
+    },
+    limparModal() {
+      this.pizza.nome = "",
+      this.pizza.ingredientes = "",
+      this.pizza.preco = 0,
+      this.pizza.imgURL = "/up-image.png"
+      this.pizzaAlterada.nome = "",
+      this.pizzaAlterada.ingredientes = "",
+      this.pizzaAlterada.preco = 0,
+      this.pizzaAlterada.imgURL = "/up-image.png"
     },
     async adicionarPizza() {
       await PizzaService.adicionarPizza(this.pizza)
+        .catch(err => console.error('error at adicionar pizza', err))
+      this.limparModal()
+      await this.buscarPizzas()
+      this.hideAdicionar()
+    },
 
+    async alterarPizza() {
+      await PizzaService.alterarPizza(this.pizzaAlterada)
+        .catch(err => console.error('error at alterar pizza', err))
+      this.limparModal()
+      await this.buscarPizzas()
+      this.hideAlterar()
+    },
+    async removerPizza(pizzaId) {
+      await PizzaService.removerPizza(pizzaId)
+      await this.buscarPizzas()
+    },
+    async xd () {
+      console.log('xd')
+    },
+    async buscarPizzas() {
+      this.pizzas = await PizzaService.buscarPizzas()
     },
     async loadImageAsBase64(e) {
-      console.log("Imagem carregada")
       const file = e.target.files[0]
-      this.pizza.imgURL = URL.createObjectURL(file)
       const fileBase64 = await this.toBase64(file)
-      this.imagem = fileBase64
+        .catch(err => console.error('error at loadimage as base 65', err))
+      this.pizza.imgURL = fileBase64
+      this.pizzaAlterada.imgURL = fileBase64
     },
     toBase64(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
+        reader.onload = () => {
+          resolve(reader.result)
+        }
         reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
         reader.onerror = error => reject(error);
       });
     },
-    async buscarPizzas() {
-      this.pizzas = await PizzaService.buscarPizzas()
-    }
   }
 };
 </script>

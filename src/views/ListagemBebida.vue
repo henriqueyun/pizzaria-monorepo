@@ -23,7 +23,7 @@
         <label for="arquivo">
           <img class="up-img" src="../assets/up-image.png" width="80px">
         </label>
-        <input type="file" name="arquivo" id="arquivo">
+        <input type="file" name="arquivo-bebida" id="arquivo-bebida">
         <span class='nome'>Nome da Pizza</span>
         <input class='text-box' name='nome produto'>
         <span class='nome'>Ingredientes</span>
