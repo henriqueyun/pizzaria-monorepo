@@ -35,17 +35,18 @@
           <img class="up-img" :src="pizza.imgURL" width="80px">
         </label>
         <input type="file" name="arquivo" id="arquivo" accept=".jpg, .png, .jpeg" @change="loadImageAsBase64">
-        <span class='nome'>Nome da Pizza</span>
+        <span class='nome'>*Nome da Pizza</span>
         <input v-model="pizza.nome" class='text-box' name='nome produto'>
         <span class='nome'>Ingredientes</span>
         <label for="ingredientes">
           <textarea v-model="pizza.ingredientes" class="text-area" rows="4"></textarea>
         </label>
         <input class='text-box' name='ingredientes' style="display: none;">
-        <span  class='nome'>Preço</span>
-        <input v-model="pizza.preco" class='text-box' name='preco'>
+        <span  class='nome'>*Preço</span>
+        <input v-model="pizza.preco" class='text-box' name='preco' onkeypress="if (!isNaN(String.fromCharCode(window.event.keyCode)) || window.event.keyCode == 44) return true; else return false;">
         <button class="btn-modal green" @click="adicionarPizza()" >Salvar</button>
         <button class="btn-modal red" @click="hideAdicionar()">Cancelar</button>
+        <p style="font-size:0.8em; padding-left: 20px; padding-top: 20px;">*Campos obrigatórios</p>
       </div>
     </modal>
   
@@ -57,17 +58,18 @@
           <img class="up-img" :src="pizzaAlterada.imgURL" width="80px">
         </label>
         <input type="file" name="arquivo" id="arquivo" accept=".jpg, .png, .jpeg" @change="loadImageAsBase64">
-        <span class='nome'>Nome da Pizza</span>
+        <span class='nome'>*Nome da Pizza</span>
         <input v-model="pizzaAlterada.nome" class='text-box' name='nome produto'>
         <span class='nome'>Ingredientes</span>
         <label for="ingredientes">
           <textarea v-model="pizzaAlterada.ingredientes" class="text-area" rows="4"></textarea>
         </label>
         <input class='text-box' name='ingredientes' style="display: none;">
-        <span  class='nome'>Preço</span>
-        <input v-model="pizzaAlterada.preco" class='text-box' name='preco'>
+        <span  class='nome'>*Preço</span>
+        <input v-model="pizzaAlterada.preco" class='text-box' name='preco' onkeypress="if (!isNaN(String.fromCharCode(window.event.keyCode)) || window.event.keyCode == 44) return true; else return false;">
         <button class="btn-modal green" @click="alterarPizza()">Alterar</button>
         <button class="btn-modal red" @click="hideAlterar()">Cancelar</button>
+        <p style="font-size:0.8em; padding-left: 20px; padding-top: 20px;">*Campos obrigatórios</p>
       </div>
     </modal>
  
@@ -130,19 +132,29 @@ export default {
       this.pizzaAlterada.imgURL = "/up-image.png"
     },
     async adicionarPizza() {
-      await PizzaService.adicionarPizza(this.pizza)
-        .catch(err => console.error('error at adicionar pizza', err))
-      this.limparModal()
-      await this.buscarPizzas()
-      this.hideAdicionar()
+      if (this.pizza.nome == "" || this.pizza.preco == 0){
+        alert("Preencha os campos obrigatórios")
+      }
+      else{
+        await PizzaService.adicionarPizza(this.pizza)
+          .catch(err => console.error('error at adicionar pizza', err))
+        this.limparModal()
+        await this.buscarPizzas()
+        this.hideAdicionar()
+      }
     },
 
     async alterarPizza() {
-      await PizzaService.alterarPizza(this.pizzaAlterada)
-        .catch(err => console.error('error at alterar pizza', err))
-      this.limparModal()
-      await this.buscarPizzas()
-      this.hideAlterar()
+      if (this.pizza.nome == "" || this.pizza.preco == 0){
+        alert("Preencha os campos obrigatórios")
+      }
+      else{
+        await PizzaService.alterarPizza(this.pizzaAlterada)
+          .catch(err => console.error('error at alterar pizza', err))
+        this.limparModal()
+        await this.buscarPizzas()
+        this.hideAlterar()
+      }
     },
     async removerPizza(pizzaId) {
       await PizzaService.removerPizza(pizzaId)
@@ -158,7 +170,7 @@ export default {
     async loadImageAsBase64(e) {
       const file = e.target.files[0]
       const fileBase64 = await this.toBase64(file)
-        .catch(err => console.error('error at loadimage as base 65', err))
+        .catch(err => console.error('error at loadimage as base 64', err))
       this.pizza.imgURL = fileBase64
       this.pizzaAlterada.imgURL = fileBase64
     },

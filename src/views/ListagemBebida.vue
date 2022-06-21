@@ -31,23 +31,24 @@
     <modal name="adicionar" :clickToClose="true" :height="'auto'" :minHeight="600" :adaptive="true" :scrollable="true" :focusTrap="true" >
       <div>
         <h2 style="margin: 15px">Adicionar Bebida</h2>
-        <span class='nome'>Imagem da Bebida</span>
-        <label for="arquivo">
-          <img class="up-img" :src="bebida.imgURL" width="80px">
-        </label>
-        <input type="file" name="arquivo" id="arquivo" accept=".jpg, .png, .jpeg" @change="loadImageAsBase64">
-        <span class='nome'>Nome da Bebida</span>
-        <input v-model="bebida.nome" class='text-box' name='nome produto'>
-        <span class='nome'>Volume da Bebida (ml)</span>
-        <input v-model="bebida.volume" class='text-box' name='volume produto'>
-        <div class="nome" style="padding-left: 20px;">
-          <input v-model="bebida.alcoolica" type="checkbox" id="alcool" name="alcool">
-          <label for="alcool"> Bebida alcoólica</label>
-        </div>
-        <span  class='nome'>Preço</span>
-        <input v-model="bebida.preco" class='text-box' name='preco'>
-        <button class="btn-modal green" @click="adicionarBebida()" >Salvar</button>
-        <button class="btn-modal red" @click="hideAdicionar()">Cancelar</button>
+          <span class='nome'>Imagem da Bebida</span>
+          <label for="arquivo">
+            <img class="up-img" :src="bebida.imgURL" width="80px">
+          </label>
+          <input type="file" name="arquivo" id="arquivo" accept=".jpg, .png, .jpeg" @change="loadImageAsBase64">
+          <span class='nome'>*Nome da Bebida</span>
+          <input v-model="bebida.nome" class='text-box' name='nome produto'>
+          <span class='nome'>Volume da Bebida (ml)</span>
+          <input v-model="bebida.volume" class='text-box' name='volume produto' onkeypress="if (!isNaN(String.fromCharCode(window.event.keyCode))) return true; else return false;">
+          <div class="nome" style="padding-left: 20px;">
+            <input v-model="bebida.alcoolica" type="checkbox" id="alcool" name="alcool">
+            <label for="alcool"> Bebida alcoólica</label>
+          </div>
+          <span  class='nome'>*Preço</span>
+          <input v-model="bebida.preco" class='text-box' name='preco' onkeypress="if (!isNaN(String.fromCharCode(window.event.keyCode)) || window.event.keyCode == 44) return true; else return false;">
+          <button class="btn-modal green" @click="adicionarBebida()" >Salvar</button>
+          <button class="btn-modal red" @click="hideAdicionar()">Cancelar</button>
+          <p style="font-size:0.8em; padding-left: 20px; padding-top: 20px;">*Campos obrigatórios</p>
       </div>
     </modal>
   
@@ -59,18 +60,19 @@
           <img class="up-img" :src="bebidaAlterada.imgURL" width="80px">
         </label>
         <input type="file" name="arquivo" id="arquivo" accept=".jpg, .png, .jpeg" @change="loadImageAsBase64">
-        <span class='nome'>Nome da Bebida</span>
+        <span class='nome'>*Nome da Bebida</span>
         <input v-model="bebidaAlterada.nome" class='text-box' name='nome produto'>
         <span class='nome'>Volume da Bebida (ml)</span>
-        <input v-model="bebidaAlterada.volume" class='text-box' name='volume produto'>
+        <input v-model="bebidaAlterada.volume" class='text-box' name='volume produto' onkeypress="if (!isNaN(String.fromCharCode(window.event.keyCode))) return true; else return false;">
         <div class="nome" style="padding-left: 20px;">
           <input v-model="bebidaAlterada.alcoolica" type="checkbox" id="alcool" name="alcool">
           <label for="alcool"> Bebida alcoólica</label>
         </div>
-        <span  class='nome'>Preço</span>
-        <input v-model="bebidaAlterada.preco" class='text-box' name='preco'>
+        <span  class='nome'>*Preço</span>
+        <input v-model="bebidaAlterada.preco" class='text-box' name='preco' onkeypress="if (!isNaN(String.fromCharCode(window.event.keyCode)) || window.event.keyCode == 44) return true; else return false;">
         <button class="btn-modal green" @click="alterarBebida()">Alterar</button>
         <button class="btn-modal red" @click="hideAlterar()">Cancelar</button>
+        <p style="font-size:0.8em; padding-left: 20px; padding-top: 20px;">*Campos obrigatórios</p>
       </div>
     </modal>
  
@@ -78,6 +80,7 @@
 </template>
 
 <script>
+
 import BebidaService from "../services/BebidaService"
 export default {
   data() {
@@ -85,12 +88,16 @@ export default {
       bebida: {
         nome: "",
         preco: 0,
-        imgURL: "/up-image.png"
+        imgURL: "/up-image.png",
+        alcoolica: false,
+        volume: 0
       },
       bebidaAlterada: {
         nome: "",
         preco: 0,
-        imgURL: "/up-image.png"
+        imgURL: "/up-image.png",
+        alcoolica: false,
+        volume: 0
       },
       bebidas: []
     }
@@ -133,19 +140,30 @@ export default {
       this.bebidaAlterada.volume = 0
     },
     async adicionarBebida() {
-      await BebidaService.adicionarBebida(this.bebida)
-        .catch(err => console.error('error at adicionar bebida', err))
-      this.limparModal()
-      await this.buscarBebidas()
-      this.hideAdicionar()
+      if (this.bebida.nome == "" || this.bebida.preco == 0){
+        alert("Preencha os campos obrigatórios")
+      }
+      else{
+        this.bebida.preco.replace(",",".")
+        await BebidaService.adicionarBebida(this.bebida)
+          .catch(err => console.error('error at adicionar bebida', err))
+        this.limparModal()
+        await this.buscarBebidas()
+        this.hideAdicionar()
+      }
     },
 
     async alterarBebida() {
-      await BebidaService.alterarBebida(this.bebidaAlterada)
-        .catch(err => console.error('error at alterar bebida', err))
-      this.limparModal()
-      await this.buscarBebidas()
-      this.hideAlterar()
+       if (this.bebidaAlterada.nome == "" || this.bebidaAlterada.preco == 0){
+        alert("Preencha os campos obrigatórios")
+      }
+      else{
+        await BebidaService.alterarBebida(this.bebidaAlterada)
+          .catch(err => console.error('error at alterar bebida', err))
+        this.limparModal()
+        await this.buscarBebidas()
+        this.hideAlterar()
+      }
     },
     async removerBebida(bebidaId) {
       await BebidaService.removerBebida(bebidaId)
@@ -161,7 +179,7 @@ export default {
     async loadImageAsBase64(e) {
       const file = e.target.files[0]
       const fileBase64 = await this.toBase64(file)
-        .catch(err => console.error('error at loadimage as base 65', err))
+        .catch(err => console.error('error at loadimage as base 64', err))
       this.bebida.imgURL = fileBase64
       this.bebidaAlterada.imgURL = fileBase64
     },
@@ -179,6 +197,7 @@ export default {
     isAlcoolica(alcoolica) {
       return alcoolica ? 'Alcoólica' : 'Não alcoólica'
     }
+   
   }
 }
 </script>
