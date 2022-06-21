@@ -136,6 +136,7 @@ export default {
         alert("Preencha os campos obrigatórios")
       }
       else{
+        this.pizza.preco = parseFloat(this.pizza.preco.replace(",","."))
         await PizzaService.adicionarPizza(this.pizza)
           .catch(err => console.error('error at adicionar pizza', err))
         this.limparModal()
@@ -149,6 +150,7 @@ export default {
         alert("Preencha os campos obrigatórios")
       }
       else{
+        this.pizza.preco = parseFloat(this.pizza.preco.replace(",","."))
         await PizzaService.alterarPizza(this.pizzaAlterada)
           .catch(err => console.error('error at alterar pizza', err))
         this.limparModal()
