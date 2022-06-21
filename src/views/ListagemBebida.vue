@@ -2,83 +2,185 @@
   <div class="container">
     <h1>Bebidas</h1>
     <div>
-      <button class= "adicionar" @click="show">Adicionar</button>
+      <button class= "adicionar" @click="showAdicionar">Adicionar</button>
     </div>
     <br>
-    <div class="item-produto">
-      <div style="display: flex; align-items: center;">
-        <img src="../assets/coca.png" width="80px">
-        <span class="dado-produto">Coca-cola</span>
-        <span class="preco">Preço</span>
+    <template v-if="bebidas.length">
+      <div class="item-produto" v-for="iBebida in bebidas" v-bind:key="iBebida.id">
+        <div class="dados-produto">
+          <img :src="iBebida.imgURL" class="bebidaImg">
+          <span class="label-destaque">{{ iBebida.nome}}&emsp;</span>
+          <span class="label-destaque">{{ iBebida.volume}}ml&emsp;</span>
+          <span class="label-destaque">{{ isAlcoolica(bebida.alcoolica)}}</span>
+        </div>
+        <div class="box-botoes-item-produto">
+          <span class="label-destaque">R$ {{ iBebida.preco }}</span>
+          <button class="btn-action" @click="showAlterar(iBebida)">Alterar</button>
+          <button @click="showConfirmar(iBebida)" class="btn-action red">Excluir</button>
+        </div>
       </div>
-      <button class="excluir" @click="show1">Alterar</button>
-      <button class="excluir">Excluir</button>
-    </div>
-
-
-    <modal name="adicionar-bebida" :clickToClose="false" :height="auto" :minHeight="490" :adaptive="true" :scrollable="true" :focusTrap="true" >
+    </template>
+    <modal name="confirmar" :height="100" :width="600">
+      <div style="width: 100%; text-align: center;">
+        <h2>Tem certeza que deseja excluir?</h2>
+        <button @click="removerBebida(id)" class="btn-modal green">Sim</button>
+        <button @click="hideConfirmar()" class="btn-modal red">Não</button>
+      </div>       
+    </modal>
+   
+    <modal name="adicionar" :clickToClose="true" :height="'auto'" :minHeight="600" :adaptive="true" :scrollable="true" :focusTrap="true" >
       <div>
-        <h2 style="margin: 15px">Adicionar Pizza</h2>
-        <span class='nome'>Imagem da Pizza</span>
+        <h2 style="margin: 15px">Adicionar Bebida</h2>
+        <span class='nome'>Imagem da Bebida</span>
         <label for="arquivo">
-          <img class="up-img" src="../assets/up-image.png" width="80px">
+          <img class="up-img" :src="bebida.imgURL" width="80px">
         </label>
-        <input type="file" name="arquivo-bebida" id="arquivo-bebida">
-        <span class='nome'>Nome da Pizza</span>
-        <input class='text-box' name='nome produto'>
-        <span class='nome'>Ingredientes</span>
-        <span class='nome'>Preço</span>
-        <input class='text-box' name='preco'>
-        <button class= "salvar">Salvar</button>
-        <button class= "adicionar" @click="hide" style= "position:relative; left: 430px; top: 30px;">Cancelar</button>
+        <input type="file" name="arquivo" id="arquivo" accept=".jpg, .png, .jpeg" @change="loadImageAsBase64">
+        <span class='nome'>Nome da Bebida</span>
+        <input v-model="bebida.nome" class='text-box' name='nome produto'>
+        <span class='nome'>Volume da Bebida (ml)</span>
+        <input v-model="bebida.volume" class='text-box' name='volume produto'>
+        <div class="nome" style="padding-left: 20px;">
+          <input v-model="bebida.alcoolica" type="checkbox" id="alcool" name="alcool">
+          <label for="alcool"> Bebida alcoólica</label>
+        </div>
+        <span  class='nome'>Preço</span>
+        <input v-model="bebida.preco" class='text-box' name='preco'>
+        <button class="btn-modal green" @click="adicionarBebida()" >Salvar</button>
+        <button class="btn-modal red" @click="hideAdicionar()">Cancelar</button>
       </div>
     </modal>
-
-
-    <modal name="alterar-bebida" :clickToClose="false" :height="auto" :minHeight="490" :adaptive="true" :scrollable="true" :focusTrap="true" >
+  
+    <modal name="alterar" :clickToClose="true" :height="'auto'" :minHeight="600" :adaptive="true" :scrollable="true" :focusTrap="true" >
       <div>
-        <h2 style="margin: 15px">Editar Pizza</h2>
-        <span class='nome'>Imagem da Pizza</span>
+        <h2 style="margin: 15px">Alterar Bebida</h2>
+        <span class='nome'>Imagem da Bebida</span>
         <label for="arquivo">
-          <img class="up-img" src="../assets/pizza1.png" width="80px">
+          <img class="up-img" :src="bebidaAlterada.imgURL" width="80px">
         </label>
-        <input type="file" name="arquivo" id="arquivo">
-        <span class='nome'>Nome da Pizza</span>
-        <input class='text-box' name='nome produto'>
-        <span class='nome'>Ingredientes</span>
-        <label for="ingredientes">
-          <textarea class="text-area" rows="4"></textarea>
-        </label>
-        <input class='text-box' name='ingredientes' style="display: none;">
-        <span class='nome'>Preço</span>
-        <input class='text-box' name='preco'>
-        <button class= "salvar">Salvar</button>
-        <button class= "adicionar" @click="hide1" style= "position:relative; left: 430px; top: 30px;">Cancelar</button>
+        <input type="file" name="arquivo" id="arquivo" accept=".jpg, .png, .jpeg" @change="loadImageAsBase64">
+        <span class='nome'>Nome da Bebida</span>
+        <input v-model="bebidaAlterada.nome" class='text-box' name='nome produto'>
+        <span class='nome'>Volume da Bebida (ml)</span>
+        <input v-model="bebidaAlterada.volume" class='text-box' name='volume produto'>
+        <div class="nome" style="padding-left: 20px;">
+          <input v-model="bebidaAlterada.alcoolica" type="checkbox" id="alcool" name="alcool">
+          <label for="alcool"> Bebida alcoólica</label>
+        </div>
+        <span  class='nome'>Preço</span>
+        <input v-model="bebidaAlterada.preco" class='text-box' name='preco'>
+        <button class="btn-modal green" @click="alterarBebida()">Alterar</button>
+        <button class="btn-modal red" @click="hideAlterar()">Cancelar</button>
       </div>
     </modal>
-
-    
+ 
   </div>
 </template>
 
 <script>
+import BebidaService from "../services/BebidaService"
 export default {
+  data() {
+    return {
+      bebida: {
+        nome: "",
+        preco: 0,
+        imgURL: "/up-image.png"
+      },
+      bebidaAlterada: {
+        nome: "",
+        preco: 0,
+        imgURL: "/up-image.png"
+      },
+      bebidas: []
+    }
+  },
+  mounted() {
+    this.buscarBebidas()
+  },
   name: "App",
   methods: {
-    show() {
+    showConfirmar(bebida){
+      this.id = bebida.id
+      this.$modal.show("confirmar");
+    },
+    hideConfirmar(){
+      this.$modal.hide("confirmar");
+    },
+    showAdicionar() {
       this.$modal.show("adicionar");
     },
-    hide() {
+    hideAdicionar() {
       this.$modal.hide("adicionar");
     },
-    show1() {
+    showAlterar(bebida) {
+      this.bebidaAlterada = bebida
       this.$modal.show("alterar");
     },
-    hide1() {
+    hideAlterar() {
       this.$modal.hide("alterar");
+    },
+    limparModal() {
+      this.bebida.nome = "",
+      this.bebida.preco = 0,
+      this.bebida.imgURL = "/up-image.png"
+      this.bebida.alcoolica = false,
+      this.bebida.volume = 0,
+      this.bebidaAlterada.nome = "",
+      this.bebidaAlterada.preco = 0,
+      this.bebidaAlterada.imgURL = "/up-image.png"
+      this.bebidaAlterada.alcoolica = false,
+      this.bebidaAlterada.volume = 0
+    },
+    async adicionarBebida() {
+      await BebidaService.adicionarBebida(this.bebida)
+        .catch(err => console.error('error at adicionar bebida', err))
+      this.limparModal()
+      await this.buscarBebidas()
+      this.hideAdicionar()
+    },
+
+    async alterarBebida() {
+      await BebidaService.alterarBebida(this.bebidaAlterada)
+        .catch(err => console.error('error at alterar bebida', err))
+      this.limparModal()
+      await this.buscarBebidas()
+      this.hideAlterar()
+    },
+    async removerBebida(bebidaId) {
+      await BebidaService.removerBebida(bebidaId)
+      await this.buscarBebidas()
+      this.hideConfirmar()
+    },
+    async xd () {
+      console.log('xd')
+    },
+    async buscarBebidas() {
+      this.bebidas = await BebidaService.buscarBebidas()
+    },
+    async loadImageAsBase64(e) {
+      const file = e.target.files[0]
+      const fileBase64 = await this.toBase64(file)
+        .catch(err => console.error('error at loadimage as base 65', err))
+      this.bebida.imgURL = fileBase64
+      this.bebidaAlterada.imgURL = fileBase64
+    },
+    toBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          resolve(reader.result)
+        }
+        reader.readAsDataURL(file);
+        reader.onerror = error => reject(error);
+      });
+    },
+
+    isAlcoolica(alcoolica) {
+      return alcoolica ? 'Alcoólica' : 'Não alcoólica'
     }
   }
-};
+}
 </script>
 
 <style scoped>
@@ -87,36 +189,36 @@ export default {
     margin: 1em auto;
     display: flex;
     flex-flow: column wrap;
-    
-    /* background-color: green; */
   }
 
   .item-produto {
-    background-color: #EBE5E5;
     display: flex;
     align-items: center;
-    font-size: 2em;
+    margin-bottom: 1em;
     justify-content: space-between;
+    padding: 0.5em;
+    background-color: white;
     box-shadow: 5px 5px 20px grey;
     border-radius: 8px;
   }
+
+  .dados-produto {
+    display: flex;
+    align-items: center;
+    max-width: 60%;
+  }
+  .label-destaque {
+    font-size: 1.5em;
+  }
   
-  .dado-produto{
-    margin: 0 1em;
+  .box-botoes-item-produto {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.4em;
+    padding: 0.4em;
   }
 
-  .ingredientes-produto{
-    margin: 0 1em;
-    font-size: 0.5em;
-    padding-right: 100px;
-  }
-
-  .preco{
-    margin: 0 1em;
-    font-size: 0.8em;
-  }
-
-  .excluir{
+  .btn-action{
     background-color: #000000;
     border: none;
     color: white;
@@ -125,36 +227,50 @@ export default {
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin: 4px 15px;
     cursor: pointer;
     border-radius: 8px;
     transition-duration: 0.4s
   }
-  .excluir:hover{
-  background: #CECECE;
-  color: #000000;
-}
-.excluir:active{
-  background: red;
-  color: #000000;
-  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
-  
-}
+  .btn-action:hover{
+    background: #CECECE;
+    color: #000000;
+  }
+  .btn-action:active{
+    background: red;
+    color: #000000;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    
+  }
 
-.adicionar{
+  .btn-modal{
     background-color: #000000;
     border: none;
     color: white;
-    padding: 10px 10px;
+    padding: 15px 32px;
     text-align: center;
     text-decoration: none;
-    display: inline-block;
     font-size: 16px;
-    margin: 4px;
     cursor: pointer;
     border-radius: 8px;
-    transition: 0.4s
-}
+    transition-duration: 0.4s;
+    margin: 0.5em;
+    float: right;
+  }
+
+  .adicionar{
+      background-color: #000000;
+      border: none;
+      color: white;
+      padding: 10px 10px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: 0.4s
+  }
 
 .adicionar:hover{
   background: #CECECE;
@@ -167,30 +283,13 @@ export default {
   box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 }
 
-.salvar{
-    background-color: #000000;
-    border: none;
-    color: white;
-    padding: 10px 10px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: 0.4s;
-    position:relative; 
-    left: 430px; 
-    top: 30px;
-}
-
-.salvar:hover{
-  background: #CECECE;
+.red:hover{
+  background: red;
   color: #000000;
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 }
 
-.salvar:active{
+.green:hover{
   background: green;
   color: #000000;
   box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
@@ -203,20 +302,18 @@ export default {
   font-size: 1.2em;
 }
 
+.nome-alcool {
+  margin-top: 15px;
+  font-size: 1.2em;
+  margin-left: 10px;
+}
+
 .text-box{
   display: block;
   padding-left: 20px;
   margin-left: 20px;
   border-radius: 8px;
   height: 30px
-}
-
-.text-area{
-  display: block;
-  padding-left: 18px;
-  margin-left: 20px;
-  border-radius: 8px;
-  resize: none;
 }
 
 input[type="file"] {
@@ -232,5 +329,13 @@ input[type="file"] {
 
 .up-img:hover{
   filter:brightness(90%);
+}
+
+.bebidaImg {
+  margin: 0.8em;
+  width: 80px;
+  height: 80px;
+  min-width: 80px;
+  min-height: 80px;
 }
 </style>

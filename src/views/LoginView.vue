@@ -33,6 +33,7 @@ export default {
         this.$parent.$children[0].setJwt() 
       } catch (err) {
         console.error(err)
+        alert('Usuário ou senha inválidos!')
       }
     }
   }

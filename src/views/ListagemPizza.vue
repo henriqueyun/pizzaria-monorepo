@@ -15,11 +15,18 @@
         <div class="box-botoes-item-produto">
           <span class="label-destaque">R$ {{ iPizza.preco }}</span>
           <button class="btn-action" @click="showAlterar(iPizza)">Alterar</button>
-          <button @click="removerPizza(iPizza.id)" class="btn-action">Excluir</button>
+          <button @click="showConfirmar(iPizza)" class="btn-action red">Excluir</button>
         </div>
       </div>
     </template>
-
+    <modal name="confirmar" :height="100" :width="600">
+      <div style="width: 100%; text-align: center;">
+        <h2>Tem certeza que deseja excluir?</h2>
+        <button @click="removerPizza(id)" class="btn-modal green">Sim</button>
+        <button @click="hideConfirmar()" class="btn-modal red">Não</button>
+      </div>       
+    </modal>
+   
     <modal name="adicionar" :clickToClose="true" :height="'auto'" :minHeight="600" :adaptive="true" :scrollable="true" :focusTrap="true" >
       <div>
         <h2 style="margin: 15px">Adicionar Pizza</h2>
@@ -27,7 +34,7 @@
         <label for="arquivo">
           <img class="up-img" :src="pizza.imgURL" width="80px">
         </label>
-        <input type="file" name="arquivo" id="arquivo" @change="loadImageAsBase64">
+        <input type="file" name="arquivo" id="arquivo" accept=".jpg, .png, .jpeg" @change="loadImageAsBase64">
         <span class='nome'>Nome da Pizza</span>
         <input v-model="pizza.nome" class='text-box' name='nome produto'>
         <span class='nome'>Ingredientes</span>
@@ -37,19 +44,19 @@
         <input class='text-box' name='ingredientes' style="display: none;">
         <span  class='nome'>Preço</span>
         <input v-model="pizza.preco" class='text-box' name='preco'>
-        <button class="btn-modal" @click="adicionarPizza()" >Salvar</button>
-        <button class="btn-modal" @click="hideAdicionar()">Cancelar</button>
+        <button class="btn-modal green" @click="adicionarPizza()" >Salvar</button>
+        <button class="btn-modal red" @click="hideAdicionar()">Cancelar</button>
       </div>
     </modal>
   
     <modal name="alterar" :clickToClose="true" :height="'auto'" :minHeight="600" :adaptive="true" :scrollable="true" :focusTrap="true" >
       <div>
-        <h2 style="margin: 15px">Adicionar Pizza</h2>
+        <h2 style="margin: 15px">Alterar Pizza</h2>
         <span class='nome'>Imagem da Pizza</span>
         <label for="arquivo">
           <img class="up-img" :src="pizzaAlterada.imgURL" width="80px">
         </label>
-        <input type="file" name="arquivo" id="arquivo" @change="loadImageAsBase64">
+        <input type="file" name="arquivo" id="arquivo" accept=".jpg, .png, .jpeg" @change="loadImageAsBase64">
         <span class='nome'>Nome da Pizza</span>
         <input v-model="pizzaAlterada.nome" class='text-box' name='nome produto'>
         <span class='nome'>Ingredientes</span>
@@ -59,8 +66,8 @@
         <input class='text-box' name='ingredientes' style="display: none;">
         <span  class='nome'>Preço</span>
         <input v-model="pizzaAlterada.preco" class='text-box' name='preco'>
-        <button class="btn-modal" @click="alterarPizza()">Alterar</button>
-        <button class="btn-modal" @click="hideAlterar()">Cancelar</button>
+        <button class="btn-modal green" @click="alterarPizza()">Alterar</button>
+        <button class="btn-modal red" @click="hideAlterar()">Cancelar</button>
       </div>
     </modal>
  
@@ -92,6 +99,13 @@ export default {
   },
   name: "App",
   methods: {
+    showConfirmar(pizza){
+      this.id = pizza.id
+      this.$modal.show("confirmar");
+    },
+    hideConfirmar(){
+      this.$modal.hide("confirmar");
+    },
     showAdicionar() {
       this.$modal.show("adicionar");
     },
@@ -133,6 +147,7 @@ export default {
     async removerPizza(pizzaId) {
       await PizzaService.removerPizza(pizzaId)
       await this.buscarPizzas()
+      this.hideConfirmar()
     },
     async xd () {
       console.log('xd')
@@ -284,12 +299,13 @@ export default {
     top: 30px;
 }
 
-.salvar:hover{
-  background: #CECECE;
+.red:hover{
+  background: red;
   color: #000000;
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 }
 
-.salvar:active{
+.green:hover{
   background: green;
   color: #000000;
   box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
