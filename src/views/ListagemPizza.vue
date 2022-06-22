@@ -15,52 +15,61 @@
         <div class="box-botoes-item-produto">
           <span class="label-destaque">R$ {{ iPizza.preco }}</span>
           <button class="btn-action" @click="showAlterar(iPizza)">Alterar</button>
-          <button @click="removerPizza(iPizza.id)" class="btn-action">Excluir</button>
+          <button @click="showConfirmar(iPizza)" class="btn-action red">Excluir</button>
         </div>
       </div>
     </template>
-
+    <modal name="confirmar" :height="100" :width="600">
+      <div style="width: 100%; text-align: center;">
+        <h2>Tem certeza que deseja excluir?</h2>
+        <button style="position: relative; right: 50%;" @click="removerPizza(id)" class="btn-modal green">Sim</button>
+        <button style="position: relative; right: 15%;" @click="hideConfirmar()" class="btn-modal red">Não</button>
+      </div>       
+    </modal>
+   
     <modal name="adicionar" :clickToClose="true" :height="'auto'" :minHeight="600" :adaptive="true" :scrollable="true" :focusTrap="true" >
       <div>
         <h2 style="margin: 15px">Adicionar Pizza</h2>
-        <span class='nome'>Imagem da Pizza</span>
+        <span class='nome'>*Imagem da Pizza</span>
         <label for="arquivo">
           <img class="up-img" :src="pizza.imgURL" width="80px">
         </label>
-        <input type="file" name="arquivo" id="arquivo" @change="loadImageAsBase64">
-        <span class='nome'>Nome da Pizza</span>
+        <input type="file" name="arquivo" id="arquivo" accept=".jpg, .png, .jpeg" @change="loadImageAsBase64">
+        <span class='nome'>*Nome da Pizza</span>
         <input v-model="pizza.nome" class='text-box' name='nome produto'>
         <span class='nome'>Ingredientes</span>
         <label for="ingredientes">
           <textarea v-model="pizza.ingredientes" class="text-area" rows="4"></textarea>
         </label>
         <input class='text-box' name='ingredientes' style="display: none;">
-        <span  class='nome'>Preço</span>
-        <input v-model="pizza.preco" class='text-box' name='preco'>
-        <button class="btn-modal" @click="adicionarPizza()" >Salvar</button>
-        <button class="btn-modal" @click="hideAdicionar()">Cancelar</button>
+        <span  class='nome'>*Preço</span>
+        <input v-model="pizza.preco" class='text-box' name='preco' onkeypress="if (!isNaN(String.fromCharCode(window.event.keyCode)) || window.event.keyCode == 44) return true; else return false;">
+        <button class="btn-modal green" @click="adicionarPizza()" >Salvar</button>
+        <button class="btn-modal red" @click="hideAdicionar()">Cancelar</button>
+        <p style="font-size:0.8em; padding-left: 20px; padding-top: 20px;">*Campos obrigatórios</p>
       </div>
     </modal>
   
     <modal name="alterar" :clickToClose="true" :height="'auto'" :minHeight="600" :adaptive="true" :scrollable="true" :focusTrap="true" >
       <div>
-        <h2 style="margin: 15px">Adicionar Pizza</h2>
-        <span class='nome'>Imagem da Pizza</span>
+        <h2 style="margin: 15px">Alterar Pizza</h2>
+        <span class='nome'>*Imagem da Pizza</span>
         <label for="arquivo">
           <img class="up-img" :src="pizzaAlterada.imgURL" width="80px">
         </label>
-        <input type="file" name="arquivo" id="arquivo" @change="loadImageAsBase64">
-        <span class='nome'>Nome da Pizza</span>
+        <input type="file" name="arquivo" id="arquivo" accept=".jpg, .png, .jpeg" @change="loadImageAsBase64">
+        <span class='nome'>*Nome da Pizza</span>
         <input v-model="pizzaAlterada.nome" class='text-box' name='nome produto'>
         <span class='nome'>Ingredientes</span>
         <label for="ingredientes">
           <textarea v-model="pizzaAlterada.ingredientes" class="text-area" rows="4"></textarea>
         </label>
         <input class='text-box' name='ingredientes' style="display: none;">
-        <span  class='nome'>Preço</span>
-        <input v-model="pizzaAlterada.preco" class='text-box' name='preco'>
-        <button class="btn-modal" @click="alterarPizza()">Alterar</button>
-        <button class="btn-modal" @click="hideAlterar()">Cancelar</button>
+        <span  class='nome'>*Preço</span>
+        <input v-model="pizzaAlterada.preco" class='text-box' name='preco' onkeypress="if (!isNaN(String.fromCharCode(window.event.keyCode)) || window.event.keyCode == 44) return true; else return false;">
+        <button class="btn-modal green" @click="alterarPizza()">Alterar</button>
+        <button class="btn-modal red" @click="hideAlterar()">Cancelar</button>
+        <p style="font-size:0.8em; padding-left: 20px; padding-top: 20px;">*Campos obrigatórios</p>
       </div>
     </modal>
  
@@ -92,6 +101,13 @@ export default {
   },
   name: "App",
   methods: {
+    showConfirmar(pizza){
+      this.id = pizza.id
+      this.$modal.show("confirmar");
+    },
+    hideConfirmar(){
+      this.$modal.hide("confirmar");
+    },
     showAdicionar() {
       this.$modal.show("adicionar");
     },
@@ -116,23 +132,44 @@ export default {
       this.pizzaAlterada.imgURL = "/up-image.png"
     },
     async adicionarPizza() {
-      await PizzaService.adicionarPizza(this.pizza)
-        .catch(err => console.error('error at adicionar pizza', err))
-      this.limparModal()
-      await this.buscarPizzas()
-      this.hideAdicionar()
+      if (this.pizza.nome == "" || this.pizza.preco == 0 || this.pizza.imgURL == "/up-image.png"){
+        alert("Preencha os campos obrigatórios")
+      }
+      else{
+        if (isNaN(this.pizza.preco)){
+          this.pizza.preco = parseFloat(this.pizza.preco.replace(",","."))
+        }
+        else{
+          await PizzaService.adicionarPizza(this.pizza)
+            .catch(err => console.error('error at adicioanr pizza', err))
+          this.limparModal()
+          await this.buscarPizzas()
+          this.hideAdicionar()
+        }
+      }
     },
 
     async alterarPizza() {
-      await PizzaService.alterarPizza(this.pizzaAlterada)
-        .catch(err => console.error('error at alterar pizza', err))
-      this.limparModal()
-      await this.buscarPizzas()
-      this.hideAlterar()
+      if (this.pizzaAlterada.nome == "" || this.pizzaAlterada.preco == 0){
+        alert("Preencha os campos obrigatórios")
+      }
+      else{
+        if (isNaN(this.pizzaAlterada.preco)){
+          this.pizzaAlterada.preco = parseFloat(this.pizzaAlterada.preco.replace(",","."))
+        }
+        else{
+          await PizzaService.alterarPizza(this.pizzaAlterada)
+            .catch(err => console.error('error at alterar pizza', err))
+          this.limparModal()
+          await this.buscarPizzas()
+          this.hideAlterar()
+        }
+      }
     },
     async removerPizza(pizzaId) {
       await PizzaService.removerPizza(pizzaId)
       await this.buscarPizzas()
+      this.hideConfirmar()
     },
     async xd () {
       console.log('xd')
@@ -143,7 +180,7 @@ export default {
     async loadImageAsBase64(e) {
       const file = e.target.files[0]
       const fileBase64 = await this.toBase64(file)
-        .catch(err => console.error('error at loadimage as base 65', err))
+        .catch(err => console.error('error at loadimage as base 64', err))
       this.pizza.imgURL = fileBase64
       this.pizzaAlterada.imgURL = fileBase64
     },
@@ -284,12 +321,13 @@ export default {
     top: 30px;
 }
 
-.salvar:hover{
-  background: #CECECE;
+.red:hover{
+  background: red;
   color: #000000;
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 }
 
-.salvar:active{
+.green:hover{
   background: green;
   color: #000000;
   box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
