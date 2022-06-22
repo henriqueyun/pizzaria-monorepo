@@ -31,7 +31,7 @@
     <modal name="adicionar" :clickToClose="true" :height="'auto'" :minHeight="600" :adaptive="true" :scrollable="true" :focusTrap="true" >
       <div>
         <h2 style="margin: 15px">Adicionar Bebida</h2>
-          <span class='nome'>Imagem da Bebida</span>
+          <span class='nome'>*Imagem da Bebida</span>
           <label for="arquivo">
             <img class="up-img" :src="bebida.imgURL" width="80px">
           </label>
@@ -55,7 +55,7 @@
     <modal name="alterar" :clickToClose="true" :height="'auto'" :minHeight="600" :adaptive="true" :scrollable="true" :focusTrap="true" >
       <div>
         <h2 style="margin: 15px">Alterar Bebida</h2>
-        <span class='nome'>Imagem da Bebida</span>
+        <span class='nome'>*Imagem da Bebida</span>
         <label for="arquivo">
           <img class="up-img" :src="bebidaAlterada.imgURL" width="80px">
         </label>
@@ -148,7 +148,7 @@ export default {
     },
 
     async adicionarBebida() {
-      if (this.bebida.nome == "" || this.bebida.preco == 0){
+      if (this.bebida.nome == "" || this.bebida.preco == 0 || this.pizza.imgURL == "/up-image.png"){
         alert("Preencha os campos obrigatórios")
       }
       else{

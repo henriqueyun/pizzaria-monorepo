@@ -22,7 +22,7 @@
     <modal name="confirmar" :height="100" :width="600">
       <div style="width: 100%; text-align: center;">
         <h2>Tem certeza que deseja excluir?</h2>
-        <button style="position: relative; right: 50%;" @click="removerBebida(id)" class="btn-modal green">Sim</button>
+        <button style="position: relative; right: 50%;" @click="removerPizza(id)" class="btn-modal green">Sim</button>
         <button style="position: relative; right: 15%;" @click="hideConfirmar()" class="btn-modal red">Não</button>
       </div>       
     </modal>
@@ -30,7 +30,7 @@
     <modal name="adicionar" :clickToClose="true" :height="'auto'" :minHeight="600" :adaptive="true" :scrollable="true" :focusTrap="true" >
       <div>
         <h2 style="margin: 15px">Adicionar Pizza</h2>
-        <span class='nome'>Imagem da Pizza</span>
+        <span class='nome'>*Imagem da Pizza</span>
         <label for="arquivo">
           <img class="up-img" :src="pizza.imgURL" width="80px">
         </label>
@@ -53,7 +53,7 @@
     <modal name="alterar" :clickToClose="true" :height="'auto'" :minHeight="600" :adaptive="true" :scrollable="true" :focusTrap="true" >
       <div>
         <h2 style="margin: 15px">Alterar Pizza</h2>
-        <span class='nome'>Imagem da Pizza</span>
+        <span class='nome'>*Imagem da Pizza</span>
         <label for="arquivo">
           <img class="up-img" :src="pizzaAlterada.imgURL" width="80px">
         </label>
@@ -132,7 +132,7 @@ export default {
       this.pizzaAlterada.imgURL = "/up-image.png"
     },
     async adicionarPizza() {
-      if (this.pizza.nome == "" || this.pizza.preco == 0){
+      if (this.pizza.nome == "" || this.pizza.preco == 0 || this.pizza.imgURL == "/up-image.png"){
         alert("Preencha os campos obrigatórios")
       }
       else{
