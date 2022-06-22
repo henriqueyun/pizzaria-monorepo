@@ -1,6 +1,7 @@
 import Bebida from '../classes/Bebida.mjs'
 import BebidaModel from '../models/bebidaModel.mjs'
 import logger from '../logger.mjs'
+import FormData from 'form-data'
 
 export async function cadastrar(req, res) {
   try {
@@ -8,6 +9,8 @@ export async function cadastrar(req, res) {
     
     const bebida = new Bebida(nome, preco, imgURL, volume, alcoolica)
     const novaBebida = BebidaModel.build(bebida)
+
+    imgURL = await uploadImage(imgURL)
 
     await novaBebida.save()
       .catch(error => {
@@ -76,6 +79,27 @@ export async function buscarTodas(req, res) {
     return res.sendStatus(404)
   }
   return res.status(200).json(bebidas)
+}
+
+async function uploadImage(imageURL) {
+  const [type, base64] = imageURL.split(';')[1].split(',')
+
+  const imageFormData = new FormData()
+  imageFormData.append('image', base64)
+  imageFormData.append('type', type)
+
+  const uploadResponse = await axios.post('https://api.imgur.com/3/upload', imageFormData, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        authorization: `Client-ID 9dab4a9f9067d57`
+      }
+    })
+    .catch(error => {
+      console.error(error)
+      throw error
+    })
+
+  return uploadResponse.data.data.link
 }
 
 const bebidaController = { cadastrar, editar, excluir, buscar, buscarTodas }
