@@ -6,7 +6,7 @@ import axios from 'axios'
 
 export async function cadastrar(req, res) {
   try {
-    const { nome, preco, imgURL, volume, alcoolica } = req.body
+    let { nome, preco, imgURL, volume, alcoolica } = req.body
 
     imgURL = await uploadImage(imgURL)
     
@@ -36,6 +36,11 @@ export async function editar(req, res) {
   }
   try {
     const bebidaNovosDados = req.body
+
+    if (bebidaNovosDados.imgURL && !bebidaNovosDados.imgURL.includes('https://')) {
+      bebidaNovosDados.imgURL = await uploadImage(bebidaNovosDados.imgURL)
+    }
+
     await bebida.update(bebidaNovosDados)
     await bebida.save()
       .catch(error => {
