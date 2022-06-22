@@ -22,8 +22,8 @@
     <modal name="confirmar" :height="100" :width="600">
       <div style="width: 100%; text-align: center;">
         <h2>Tem certeza que deseja excluir?</h2>
-        <button @click="removerPizza(id)" class="btn-modal green">Sim</button>
-        <button @click="hideConfirmar()" class="btn-modal red">Não</button>
+        <button style="position: relative; right: 50%;" @click="removerBebida(id)" class="btn-modal green">Sim</button>
+        <button style="position: relative; right: 15%;" @click="hideConfirmar()" class="btn-modal red">Não</button>
       </div>       
     </modal>
    
