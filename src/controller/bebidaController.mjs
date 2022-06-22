@@ -2,6 +2,7 @@ import Bebida from '../classes/Bebida.mjs'
 import BebidaModel from '../models/bebidaModel.mjs'
 import logger from '../logger.mjs'
 import FormData from 'form-data'
+import axios from 'axios'
 
 export async function cadastrar(req, res) {
   try {
