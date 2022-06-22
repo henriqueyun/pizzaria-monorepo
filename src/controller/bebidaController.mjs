@@ -7,11 +7,12 @@ import axios from 'axios'
 export async function cadastrar(req, res) {
   try {
     const { nome, preco, imgURL, volume, alcoolica } = req.body
+
+    imgURL = await uploadImage(imgURL)
     
     const bebida = new Bebida(nome, preco, imgURL, volume, alcoolica)
     const novaBebida = BebidaModel.build(bebida)
 
-    imgURL = await uploadImage(imgURL)
 
     await novaBebida.save()
       .catch(error => {
