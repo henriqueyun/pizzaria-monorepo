@@ -11,7 +11,7 @@
           <img :src="iBebida.imgURL" class="bebidaImg">
           <span class="label-destaque">{{ iBebida.nome}}&emsp;</span>
           <span class="label-destaque">{{ iBebida.volume}}ml&emsp;</span>
-          <span class="label-destaque">{{ isAlcoolica(bebida.alcoolica)}}</span>
+          <span class="label-destaque">{{ isAlcoolica(iBebida.alcoolica)}}</span>
         </div>
         <div class="box-botoes-item-produto">
           <span class="label-destaque">R$ {{ iBebida.preco }}</span>
@@ -21,10 +21,10 @@
       </div>
     </template>
     <modal name="confirmar" :height="100" :width="600">
-      <div style="width: 100%; text-align: center;">
+      <div style="width: 600px; text-align: center;">
         <h2>Tem certeza que deseja excluir?</h2>
-        <button @click="removerBebida(id)" class="btn-modal green">Sim</button>
-        <button @click="hideConfirmar()" class="btn-modal red">Não</button>
+        <button style="position: relative; right: 50%;" @click="removerBebida(id)" class="btn-modal green">Sim</button>
+        <button style="position: relative; right: 15%;" @click="hideConfirmar()" class="btn-modal red">Não</button>
       </div>       
     </modal>
    
@@ -107,26 +107,33 @@ export default {
   },
   name: "App",
   methods: {
+
     showConfirmar(bebida){
       this.id = bebida.id
       this.$modal.show("confirmar");
     },
+
     hideConfirmar(){
       this.$modal.hide("confirmar");
     },
+
     showAdicionar() {
       this.$modal.show("adicionar");
     },
+
     hideAdicionar() {
       this.$modal.hide("adicionar");
     },
+
     showAlterar(bebida) {
       this.bebidaAlterada = bebida
       this.$modal.show("alterar");
     },
+
     hideAlterar() {
       this.$modal.hide("alterar");
     },
+
     limparModal() {
       this.bebida.nome = "",
       this.bebida.preco = 0,
@@ -139,6 +146,7 @@ export default {
       this.bebidaAlterada.alcoolica = false,
       this.bebidaAlterada.volume = 0
     },
+
     async adicionarBebida() {
       if (this.bebida.nome == "" || this.bebida.preco == 0){
         alert("Preencha os campos obrigatórios")
@@ -174,17 +182,21 @@ export default {
         }
       }
     },
+
     async removerBebida(bebidaId) {
       await BebidaService.removerBebida(bebidaId)
       await this.buscarBebidas()
       this.hideConfirmar()
     },
+
     async xd () {
       console.log('xd')
     },
+
     async buscarBebidas() {
       this.bebidas = await BebidaService.buscarBebidas()
     },
+
     async loadImageAsBase64(e) {
       const file = e.target.files[0]
       const fileBase64 = await this.toBase64(file)
@@ -192,7 +204,7 @@ export default {
       this.bebida.imgURL = fileBase64
       this.bebidaAlterada.imgURL = fileBase64
     },
-    
+
     toBase64(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
