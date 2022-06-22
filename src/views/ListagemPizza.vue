@@ -146,11 +146,11 @@ export default {
     },
 
     async alterarPizza() {
-      if (this.pizza.nome == "" || this.pizza.preco == 0){
+      if (this.pizzaAlterada.nome == "" || this.pizzaAlterada.preco == 0){
         alert("Preencha os campos obrigatórios")
       }
       else{
-        this.pizza.preco = parseFloat(this.pizza.preco.replace(",","."))
+        this.pizzaAlterada.preco = parseFloat(this.pizzaAlterada.preco.replace(",","."))
         await PizzaService.alterarPizza(this.pizzaAlterada)
           .catch(err => console.error('error at alterar pizza', err))
         this.limparModal()

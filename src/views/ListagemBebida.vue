@@ -158,7 +158,7 @@ export default {
         alert("Preencha os campos obrigatórios")
       }
       else{
-        this.bebida.preco = parseFloat(this.bebida.preco.replace(",","."))
+        this.bebidaAlterada.preco = parseFloat(this.bebidaAlterada.preco.replace(",","."))
         await BebidaService.alterarBebida(this.bebidaAlterada)
           .catch(err => console.error('error at alterar bebida', err))
         this.limparModal()
