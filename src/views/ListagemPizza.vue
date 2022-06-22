@@ -136,12 +136,16 @@ export default {
         alert("Preencha os campos obrigatórios")
       }
       else{
-        this.pizza.preco = parseFloat(this.pizza.preco.replace(",","."))
-        await PizzaService.adicionarPizza(this.pizza)
-          .catch(err => console.error('error at adicionar pizza', err))
-        this.limparModal()
-        await this.buscarPizzas()
-        this.hideAdicionar()
+        if (isNaN(this.pizza.preco)){
+          this.pizza.preco = parseFloat(this.pizza.preco.replace(",","."))
+        }
+        else{
+          await PizzaService.adicionarPizza(this.pizza)
+            .catch(err => console.error('error at adicioanr pizza', err))
+          this.limparModal()
+          await this.buscarPizzas()
+          this.hideAdicionar()
+        }
       }
     },
 
@@ -150,12 +154,16 @@ export default {
         alert("Preencha os campos obrigatórios")
       }
       else{
-        this.pizzaAlterada.preco = parseFloat(this.pizzaAlterada.preco.replace(",","."))
-        await PizzaService.alterarPizza(this.pizzaAlterada)
-          .catch(err => console.error('error at alterar pizza', err))
-        this.limparModal()
-        await this.buscarPizzas()
-        this.hideAlterar()
+        if (isNaN(this.pizzaAlterada.preco)){
+          this.pizzaAlterada.preco = parseFloat(this.pizzaAlterada.preco.replace(",","."))
+        }
+        else{
+          await PizzaService.alterarPizza(this.pizzaAlterada)
+            .catch(err => console.error('error at alterar pizza', err))
+          this.limparModal()
+          await this.buscarPizzas()
+          this.hideAlterar()
+        }
       }
     },
     async removerPizza(pizzaId) {

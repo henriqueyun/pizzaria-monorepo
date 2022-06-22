@@ -144,12 +144,16 @@ export default {
         alert("Preencha os campos obrigatórios")
       }
       else{
-        this.bebida.preco = parseFloat(this.bebida.preco.replace(",","."))
-        await BebidaService.adicionarBebida(this.bebida)
-          .catch(err => console.error('error at adicionar bebida', err))
-        this.limparModal()
-        await this.buscarBebidas()
-        this.hideAdicionar()
+        if (isNaN(this.bebida.preco)){
+          this.bebida.preco = parseFloat(this.bebida.preco.replace(",","."))
+        }
+        else{
+          await BebidaService.adicionarBebida(this.bebida)
+            .catch(err => console.error('error at adicionar bebida', err))
+          this.limparModal()
+          await this.buscarBebidas()
+          this.hideAdicionar()
+        }
       }
     },
 
@@ -158,12 +162,16 @@ export default {
         alert("Preencha os campos obrigatórios")
       }
       else{
-        this.bebidaAlterada.preco = parseFloat(this.bebidaAlterada.preco.replace(",","."))
-        await BebidaService.alterarBebida(this.bebidaAlterada)
-          .catch(err => console.error('error at alterar bebida', err))
-        this.limparModal()
-        await this.buscarBebidas()
-        this.hideAlterar()
+        if (isNaN(this.bebidaAlterada.preco)){
+          this.bebidaAlterada.preco = parseFloat(this.bebidaAlterada.preco.replace(",","."))
+        }
+        else{
+          await BebidaService.alterarBebida(this.bebidaAlterada)
+            .catch(err => console.error('error at alterar bebida', err))
+          this.limparModal()
+          await this.buscarBebidas()
+          this.hideAlterar()
+        }
       }
     },
     async removerBebida(bebidaId) {
@@ -184,6 +192,7 @@ export default {
       this.bebida.imgURL = fileBase64
       this.bebidaAlterada.imgURL = fileBase64
     },
+    
     toBase64(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
