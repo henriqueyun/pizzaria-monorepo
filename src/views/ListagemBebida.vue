@@ -148,7 +148,7 @@ export default {
     },
 
     async adicionarBebida() {
-      if (this.bebida.nome == "" || this.bebida.preco == 0 || this.pizza.imgURL == "/up-image.png"){
+      if (this.bebida.nome == "" || this.bebida.preco == 0 || this.bebida.imgURL == "/up-image.png"){
         alert("Preencha os campos obrigatórios")
       }
       else{
