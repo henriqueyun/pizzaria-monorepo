@@ -27,10 +27,5 @@ const PedidoModel = sequelize.define('pedido', {
     allowNull: true
   }
 })
-
-PedidoModel.sync()
-  .then(() => {
-    console.log('PedidoModel sincronizado')
-  })
   
 export default PedidoModel

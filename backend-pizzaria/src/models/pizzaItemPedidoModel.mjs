@@ -35,9 +35,4 @@ PizzaItemPedido.hasOne(PizzaModel, {
   sourceKey: 'pizzaId'
 })
 
-PizzaItemPedido.sync()
-  .then(() => {
-    console.log('PizzaItemPedido sincronizado')
-  })
-
 export default PizzaItemPedido

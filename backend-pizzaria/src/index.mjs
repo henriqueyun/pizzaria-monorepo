@@ -3,7 +3,6 @@ import router from './router/index.mjs'
 import config from './config/index.mjs'
 import logger from './logger.mjs'
 import cors from 'cors'
-import sequelize from './sequelize.mjs'
 
 const app = express()
 app.use(express.json({ limit: '10mb'}))

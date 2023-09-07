@@ -24,9 +24,4 @@ const BebidaModel = sequelize.define('bebida', {
   }
 })
 
-BebidaModel.sync()
-  .then(() => {
-    console.log('Bebida sincronizada')
-  })
-
 export default BebidaModel

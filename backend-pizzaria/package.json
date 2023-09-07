@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "npx mocha --experimental-modules tests/main.test.mjs --exit",
-    "dev:nodemon": "nodemon -r dotenv/config src/index.mjs",
-    "dev:docker": "docker compose up -d",
+    "dev:nodemon": "npx nodemon -r dotenv/config src/index.mjs",
+    "dev:docker": "docker compose up -d --build",
     "start": "node src/index.mjs"
   },
   "keywords": [],

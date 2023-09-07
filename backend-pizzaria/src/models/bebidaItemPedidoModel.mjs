@@ -35,9 +35,4 @@ BebidaItemPedido.hasOne(BebidaModel, {
   sourceKey: 'bebidaId'
 })
 
-BebidaItemPedido.sync()
-  .then(() => {
-    console.log('BebidaItemPedido sincronizado')
-  })
-
 export default BebidaItemPedido

@@ -20,9 +20,4 @@ const PizzaModel = sequelize.define('pizza', {
   }
 })
 
-PizzaModel.sync()
-  .then(() => {
-    console.log('Pizza sincronizada')
-  })
-
 export default PizzaModel

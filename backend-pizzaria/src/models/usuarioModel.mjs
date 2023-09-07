@@ -26,9 +26,4 @@ const UsuarioModel = sequelize.define('usuario', {
   }
 })
 
-UsuarioModel.sync()
-  .then(() => {
-    console.log('Usuario sincronizada')
-  })
-
 export default UsuarioModel
