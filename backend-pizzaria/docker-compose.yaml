@@ -1,22 +1,6 @@
 version: "3"
 
 services:
-        #  front-pizzaria-admin:
-        #    hostname: frontend-admin
-        #    image: front-pizzaria-admin:18-05
-        #    ports:
-        #      - 8081:8080
-        #    depends_on:
-        #      - backend-pizzaria
-        #
-        #  front-pizzaria-cliente:
-        #    hostname: frontend-cliente
-        #    image: front-pizzaria-cliente:18-05
-        #    ports:
-        #      - 8082:8080
-        #    depends_on:
-        #      - backend-pizzaria
-
   backend-pizzaria:
     container_name: backend-pizzaria
     build: ./

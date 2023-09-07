@@ -1,0 +1,21 @@
+{
+  "name": "pizzaria-monorepo",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "workspaces": [
+    "backend-pizzaria",
+    "frontend-pizzaria-admin",
+    "frontend-pizzaria-cliente"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/henriqueyun/pizzaria-monorepo.git"
+  },
+  "author": "henriqueyun",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/henriqueyun/pizzaria-monorepo/issues"
+  },
+  "homepage": "https://github.com/henriqueyun/pizzaria-monorepo#readme"
+}
