@@ -21,14 +21,11 @@ export async function cadastrar(req, res) {
   const {
     itensPedido
   } = req.body
-  
-
-  telefoneCliente = parseInt(telefoneCliente.replaceAll("(","").replaceAll(")", "").replaceAll("-", "").trim())
 
   const pedido =
     new Pedido(nomeCliente,
       enderecoCliente,
-      telefoneCliente,
+      parseInt(telefoneCliente.replaceAll("(","").replaceAll(")", "").replaceAll("-", "").trim()),
       itensPedido,
       formaPagamento,
       status,
