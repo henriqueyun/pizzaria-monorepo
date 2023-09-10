@@ -9,11 +9,11 @@ Backend do Projeto Pizzaria feito para integrar-se com os projetos:
 
 ### Docker
 
-Você pode rodar o projeto utilizando Docker Compose, basta executar na pasta raíz do projeto:
+Você pode rodar o projeto utilizando Docker Compose, basta executar na pasta raíz do projeto backend-pizzaria:
 ```
-docker compose up
+yarn dev:docker
 ```
-> Para que o container subam sem problemas, assegure que as portas **8010** e **3306** não estejam em uso.
+> Para que o container subam sem problemas, assegure que as portas **8010** e **3306** não estejam em uso, caso estejam altere as portas no arquivo .env
 
 ### Host
 
@@ -34,11 +34,11 @@ npm run dev
 
 ### Seeders
 
-Caso deseje um pequeno conjunto de dados de maneira rápida e simples para fazer testes e demonstrar a aplicação, execute utilizando um cliente MySQL o arquivo [seed.sql](./db/seed.sql)
-
-## Testes
-
-O projeto possui ~~poucos~~ testes automatizados com o [Mocha.js](https://mochajs.org/), para executá-los rode na raíz do projeto:
+O projeto utiliza migrations e seeders disponibilizados pelo sequelize-cli, para as migrations e os seeders:
 ```
-npm run test
+# migrations (roda automaticamente após subir dev com dev:docker através do post script postdev:docker)
+yarn db:migrate
+
+# seeders
+yarn db:seed
 ```
