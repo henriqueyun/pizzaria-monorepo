@@ -2,7 +2,6 @@ import Pizza from '../classes/Pizza.mjs'
 import PizzaModel from '../models/pizzaModel.mjs'
 import logger from '../logger.mjs'
 import axios from 'axios'
-import config from '../config/index.mjs'
 import FormData from 'form-data'
 
 export async function cadastrar(req, res) {

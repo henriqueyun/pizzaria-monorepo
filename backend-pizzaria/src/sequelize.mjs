@@ -5,14 +5,15 @@ import pino from 'pino'
 const logger = pino()
 
 const sequelize = new Sequelize(
-  config.databaseName,
-  config.databaseUser,
-  config.databasePassword,
+  config.database.name,
+  config.database.user,
+  config.database.password,
   {
-    host: config.databaseHost,
-    port: config.databasePort,
-    dialect: 'mysql',
+    host: config.database.host,
+    port: config.database.port,
+    dialect: 'postgres',
     logging: message => logger.debug(message)
   },
 )
+
 export default sequelize
