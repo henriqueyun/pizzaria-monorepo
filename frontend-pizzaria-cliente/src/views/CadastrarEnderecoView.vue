@@ -58,7 +58,6 @@ export default {
       } 
 
       const TELEFONE_PATTERN = /^\([1-9]{2}\) (?:[2-8]|9[1-9])[0-9]{3}-[0-9]{4}$/
-      console.log(this.cliente.telefone)
       if (!TELEFONE_PATTERN.test(this.cliente.telefone)) {
         errosValidacao += '\nTelefone, o formato deve ser (XX) XXXX-XXXX'
       }

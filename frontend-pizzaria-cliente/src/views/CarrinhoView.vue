@@ -16,7 +16,7 @@
             <span class="btn-item-action">Editar</span>
           </router-link>
           <span class="btn-item-action" @click="removerPizza(itemPizza.produto.id)">Remover</span>
-          <p>{{ itemPizza.produto.ingredientes }}
+          <p>{{ itemPizza.produto.ingredientes }}</p>
           <p>Valor: R$ {{ itemPizza.qtd * itemPizza.produto.preco}}</p>
         </div>
         <div
@@ -186,7 +186,6 @@ export default {
       }
 
       if (camposInvalidos) {
-        console.log(camposInvalidos)
         camposInvalidos = 'Opa, parece que há dados do cliente não preenchidos 🤔:\n' + camposInvalidos
         if (dadosClienteInvalidos) {
           camposInvalidos += '\n\nPor favor, vá para a página de Cadastrar Endereço e preencha antes de realizar o pedido'
@@ -195,7 +194,6 @@ export default {
       }
       const itens = JSON.parse(localStorage.getItem('itensPedido'))
       const itensPedido = [...itens.pizzas,...itens.bebidas]
-      console.log(itensPedido)
       if (!itensPedido.length) {
         alert('É necessário adicionar ao menos uma pizza ou bebida para enviar o pedido 😕😳')
         return
