@@ -56,6 +56,7 @@ export default {
     },
     async healthCheck () {
       try {
+        this.isLoading = true
         await HealthService.checarHealth()
         this.isAPIOnline = true
       } catch (error) {
