@@ -4,17 +4,8 @@ import pino from 'pino'
 
 const logger = pino()
 
-const sequelize = new Sequelize(
-  config.database.name,
-  config.database.user,
-  config.database.password,
-  {
-    host: config.database.host,
-    port: config.database.port,
-    dialect: 'postgres',
-    dialectOptions: config.database.dialectOptions,
-    logging: message => logger.debug(message)
-  },
-)
+const sequelize = new Sequelize(config.databaseUri, {
+  logging: message => logger.debug(message)
+})
 
 export default sequelize
