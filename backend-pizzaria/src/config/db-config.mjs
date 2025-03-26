@@ -1,3 +1,5 @@
+import 'dotenv/config'
+
 export default {
   "development": {
     "username": process.env.DB_USER ?? "root",
@@ -19,5 +21,10 @@ export default {
     "database": process.env.DB_DATABASE,
     "host": process.env.DB_HOST,
     "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": {
+        rejectUnauthorized: false,
+      }
+    }
   }
 }

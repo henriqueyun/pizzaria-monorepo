@@ -9,6 +9,7 @@ const config = {
     password: dbConfigEnv.password || 'root',
     host: dbConfigEnv.host|| 'localhost',
     port: dbConfigEnv.port || 5432,
+    dialectOptions: dbConfigEnv.dialectOptions || {}
   },
   logLevel: process.env.LOG_LEVEL || 'debug',
   port: process.env.PORT || 8000,
